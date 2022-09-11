@@ -6,7 +6,7 @@
 *.iml
 
 ## Test Date
-.storage/
+.src/main/resources/storage/
 
 ## Directory-based project format:
 .idea/
