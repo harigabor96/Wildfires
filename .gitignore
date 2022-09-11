@@ -1,13 +1,8 @@
-#
-# Are you tempted to edit this file?
-#
-# First consider if the changes make sense for all,
-# or if they are specific to your workflow/system.
-# If it is the latter, you can augment this list with
-# entries in .git/info/excludes
-#
-# see also test/files/.gitignore
-#
+# data
+/src/main/resources/storage/*
+
+# compiled files Maven
+/src/target/*
 
 #
 # JARs aren't checked in, they are fetched by sbt
