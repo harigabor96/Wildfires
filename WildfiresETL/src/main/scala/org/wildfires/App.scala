@@ -1,16 +1,26 @@
 package org.wildfires
 import org.apache.spark.sql.SparkSession
+import org.wildfires.workflow.SimpleWorkflow
 
-object App extends App {
+object App {
+  def main(args: Array[String]): Unit = {
+    val spark = createSparkSession()
+    executeWorkflows(spark)
+  }
 
-  val spark = SparkSession
-    .builder()
-    .appName("Spark SQL basic example")
-    .master("local")
-    .config("spark.some.config.option", "some-value")
-    .getOrCreate()
+  def createSparkSession(): SparkSession = {
+    val spark = SparkSession
+      .builder()
+      .appName("Wildfires")
+      .master("local")
+      .getOrCreate()
 
-  import spark.implicits._
+    spark.sparkContext.setLogLevel("ERROR")
 
-  Seq("Hello","World").toDF().show()
+    spark
+  }
+
+  def executeWorkflows(spark: SparkSession): Unit = {
+    SimpleWorkflow(spark).execute()
+  }
 }
