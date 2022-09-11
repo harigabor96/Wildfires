@@ -4,7 +4,7 @@ import org.apache.spark.sql.DataFrame
 
 trait GenericPipeline {
 
-  def execute: Unit = {
+  def execute(): Unit = {
     load(transform(extract()))
   }
 
