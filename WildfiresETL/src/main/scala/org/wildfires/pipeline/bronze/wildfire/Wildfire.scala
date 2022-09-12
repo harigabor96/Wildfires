@@ -4,10 +4,15 @@ import org.apache.spark.sql.DataFrame
 import org.wildfires.pipeline.GenericPipeline
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
+import org.wildfires.utils.DBUtils
 
 case class Wildfire(spark: SparkSession) extends GenericPipeline {
 
   val inputPath = "C:\\Users\\harig\\Desktop\\Wildfires-1\\WildfiresETL\\src\\main\\resources\\storage\\raw\\FPA_FOD_20170508"
+  val outputPath = "C:\\Users\\harig\\Desktop\\Wildfires-1\\WildfiresETL\\src\\main\\resources\\storage\\curated\\bronze\\wildfire"
+  val databaseName ="Wildfire"
+  val tableName = "Fires"
+
   val inputSchema = new StructType()
     .add("OBJECTID", StringType)
     .add("FOD_ID", StringType )
@@ -64,11 +69,15 @@ case class Wildfire(spark: SparkSession) extends GenericPipeline {
   }
 
   override def load(transformedData: DataFrame): Unit = {
+    DBUtils.createDatabaseIfNotExist(spark,s"$databaseName")
+
     transformedData
       .writeStream
       .outputMode("append")
-      .format("console")
-      .start()
-      .awaitTermination()
+      .format("parquet")
+      .option("path",s"$outputPath/data")
+      .option("checkpointLocation", s"$outputPath/checkpoint")
+      .toTable(s"$databaseName.$tableName")
+      .awaitTermination(60000)
   }
 }
