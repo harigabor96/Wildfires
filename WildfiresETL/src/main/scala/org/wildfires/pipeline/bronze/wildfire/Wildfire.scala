@@ -8,10 +8,13 @@ import org.wildfires.utils.DBUtils
 
 case class Wildfire(spark: SparkSession) extends GenericPipeline {
 
-  val inputPath = "C:\\Users\\harig\\Desktop\\Wildfires-1\\WildfiresETL\\src\\main\\resources\\storage\\raw\\FPA_FOD_20170508"
-  val outputPath = "C:\\Users\\harig\\Desktop\\Wildfires-1\\WildfiresETL\\src\\main\\resources\\storage\\curated\\bronze\\wildfire"
-  val databaseName ="Wildfire"
-  val tableName = "Fires"
+  val inputPath = "src/main/resources/storage/raw/FPA_FOD_20170508/2022-09-12/in"
+
+  val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
+  val outputDatabaseName ="bronze_wildfire"
+  val outputTableName = "fires"
+
+  val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
 
   val inputSchema = new StructType()
     .add("OBJECTID", StringType)
@@ -69,15 +72,22 @@ case class Wildfire(spark: SparkSession) extends GenericPipeline {
   }
 
   override def load(transformedData: DataFrame): Unit = {
-    DBUtils.createDatabaseIfNotExist(spark,s"$databaseName")
+    DBUtils.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
 
     transformedData
       .writeStream
       .outputMode("append")
-      .format("parquet")
-      .option("path",s"$outputPath/data")
-      .option("checkpointLocation", s"$outputPath/checkpoint")
-      .toTable(s"$databaseName.$tableName")
+      .format("delta")
+      .option("path", s"$outputTablePath/data" )
+      .option("checkpointLocation", s"$outputTablePath/checkpoint")
+      .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination(60000)
+
+    /* Not for PCs
+
+    DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
+
+    */
   }
 }

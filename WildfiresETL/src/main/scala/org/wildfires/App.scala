@@ -9,12 +9,10 @@ object App {
   }
 
   def createSparkSession(): SparkSession = {
-    val warehouseLocation = "C:\\Users\\harig\\Desktop\\Wildfires-1\\WildfiresETL\\src\\main\\resources\\storage\\curated"
-
     val spark = SparkSession
       .builder()
       .appName("Wildfires")
-      .config("spark.sql.warehouse.dir", warehouseLocation)
+      .config("spark.sql.warehouse.dir", "src/main/resources/storage/curated")
       .master("local")
       .getOrCreate()
 
