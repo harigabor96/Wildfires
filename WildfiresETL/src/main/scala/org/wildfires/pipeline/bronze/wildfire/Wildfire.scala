@@ -8,7 +8,7 @@ import org.wildfires.service.DBService
 
 case class Wildfire(spark: SparkSession) extends GenericPipeline {
 
-  val inputPath = "src/main/resources/storage/raw/FPA_FOD_20170508/2022-09-12/in"
+  val inputPath = "src/main/resources/storage/raw/FPA_FOD_20170508/{*}/in"
 
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
   val outputDatabaseName ="bronze_wildfire"
