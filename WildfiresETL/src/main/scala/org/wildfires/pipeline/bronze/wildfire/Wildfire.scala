@@ -4,7 +4,7 @@ import org.apache.spark.sql.DataFrame
 import org.wildfires.pipeline.GenericPipeline
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
-import org.wildfires.utils.DBUtils
+import org.wildfires.service.DBService
 
 case class Wildfire(spark: SparkSession) extends GenericPipeline {
 
@@ -72,7 +72,7 @@ case class Wildfire(spark: SparkSession) extends GenericPipeline {
   }
 
   override def load(transformedData: DataFrame): Unit = {
-    DBUtils.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
+    DBService.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
 
     transformedData
       .writeStream

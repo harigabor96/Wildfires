@@ -1,5 +1,5 @@
 package org.wildfires.pipeline.modules.firetimetravel.util
 
-object Functions {
+case class Functions() {
 
 }

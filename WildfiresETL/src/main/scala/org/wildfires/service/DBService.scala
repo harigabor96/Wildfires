@@ -1,9 +1,9 @@
-package org.wildfires.utils
+package org.wildfires.service
 
 import io.delta.tables.DeltaTable
 import org.apache.spark.sql.SparkSession
 
-object DBUtils {
+object DBService {
 
   def createDatabaseIfNotExist(spark: SparkSession, databaseName: String) = {
     spark.sql(s"""

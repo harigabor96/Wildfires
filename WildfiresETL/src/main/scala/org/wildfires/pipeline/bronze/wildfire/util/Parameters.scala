@@ -1,5 +1,5 @@
 package org.wildfires.pipeline.bronze.wildfire.util
 
-object Parameters {
+case class Parameters() {
 
 }
