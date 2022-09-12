@@ -3,6 +3,7 @@ package org.wildfires.pipeline.bronze.wildfire
 import org.apache.spark.sql.DataFrame
 import org.wildfires.pipeline.GenericPipeline
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.types._
 import org.wildfires.service.DBService
 
@@ -68,7 +69,9 @@ case class Wildfire(spark: SparkSession) extends GenericPipeline {
 
   override def transform(extractedData: Any): DataFrame = {
     val extractedDf = extractedData.asInstanceOf[DataFrame]
+
     extractedDf
+      .withColumn("RawFilePath", input_file_name())
   }
 
   override def load(transformedData: DataFrame): Unit = {
@@ -82,6 +85,12 @@ case class Wildfire(spark: SparkSession) extends GenericPipeline {
       .option("checkpointLocation", s"$outputTablePath/checkpoint")
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination(60000)
+
+    /*
+    spark.sql(s"""
+      SELECT * FROM $outputDatabaseName.$outputTableName
+    """).show(20, false)
+    */
 
     /* Not for PCs
 
