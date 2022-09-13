@@ -6,6 +6,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.types._
 import org.wildfires.service.DBService
+import org.wildfires.pipeline.bronze.wildfire.util.Functions._
 
 case class Wildfire(spark: SparkSession) extends GenericPipeline {
 
@@ -71,7 +72,7 @@ case class Wildfire(spark: SparkSession) extends GenericPipeline {
     val extractedDf = extractedData.asInstanceOf[DataFrame]
 
     extractedDf
-      .withColumn("RawFilePath", input_file_name())
+      .withColumn("ExtractionDate", getExtractionDate(input_file_name()))
   }
 
   override def load(transformedData: DataFrame): Unit = {
@@ -86,11 +87,9 @@ case class Wildfire(spark: SparkSession) extends GenericPipeline {
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination(60000)
 
-    /*
     spark.sql(s"""
       SELECT * FROM $outputDatabaseName.$outputTableName
     """).show(20, false)
-    */
 
     /* Not for PCs
 
