@@ -81,21 +81,14 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
     transformedData
       .writeStream
       .outputMode("append")
+      .partitionBy("ExtractionDate")
       .format("delta")
       .option("path", s"$outputTablePath/data" )
       .option("checkpointLocation", s"$outputTablePath/checkpoint")
       .toTable(s"$outputDatabaseName.$outputTableName")
-      .awaitTermination(30000)
+      .awaitTermination(60000)
 
-    spark.sql(s"""
-      SELECT * FROM $outputDatabaseName.$outputTableName
-    """).show(20, false)
-
-    /* Not for PCs
-
-    DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
-
-    */
+    DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
+    DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }
