@@ -85,7 +85,7 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
       .option("path", s"$outputTablePath/data" )
       .option("checkpointLocation", s"$outputTablePath/checkpoint")
       .toTable(s"$outputDatabaseName.$outputTableName")
-      .awaitTermination(60000)
+      .awaitTermination(30000)
 
     spark.sql(s"""
       SELECT * FROM $outputDatabaseName.$outputTableName
