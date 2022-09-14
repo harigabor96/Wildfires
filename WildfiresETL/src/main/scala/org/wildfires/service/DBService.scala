@@ -11,6 +11,14 @@ object DBService {
     """)
   }
 
+  def createDeltaTableFromPath(spark: SparkSession, databaseName: String, tableName: String, deltaLocation: String) = {
+    spark.sql(s"""
+            CREATE TABLE $databaseName.$tableName
+            USING DELTA
+            LOCATION '$deltaLocation'
+    """)
+  }
+
   def optimizeTable(spark: SparkSession, databaseName: String, tableName: String) = {
     DeltaTable.forName(spark,s"$databaseName.$tableName").optimize().executeCompaction()
   }

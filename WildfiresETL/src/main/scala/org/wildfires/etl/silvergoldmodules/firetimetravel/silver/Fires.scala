@@ -45,17 +45,17 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
         col("FOD_ID")
       )
       .agg(
-        first("ExtractionDate"),
-        first("DISCOVERY_DATE"),
-        first("CONT_DATE"),
-        first("LATITUDE"),
-        first("LONGITUDE")
+        first("ExtractionDate").as("ExtractionDate"),
+        first("DISCOVERY_DATE").as("DISCOVERY_DATE"),
+        first("CONT_DATE").as("CONT_DATE"),
+        first("LATITUDE").as("LATITUDE"),
+        first("LONGITUDE").as("LONGITUDE")
       )
       .select(
         col("ExtractionDate"),
         col("FOD_ID"),
-        to_date(col("DISCOVERY_DATE"),"mm/dd/yyyy"),
-        to_date(col("CONT_DATE"),"mm/dd/yyyy"),
+        col("DISCOVERY_DATE").as("DISCOVERY_DATE"),
+        col("CONT_DATE").as("CONT_DATE"),
         col("LATITUDE").cast(DoubleType),
         col("LONGITUDE").cast(DoubleType)
       )
@@ -63,28 +63,29 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
 
   override def load(transformedData: DataFrame): Unit = {
 
-    DBService.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
-    FileService.createDirectoryIfNotExist(outputTableDataPath.substring("file:/".length, outputTableDataPath.length))
-
-    DeltaTable
-      .createIfNotExists(spark)
-      .location(outputTableDataPath)
-      .tableName(s"$outputDatabaseName.$outputTableName")
-      .addColumn("FOD_ID","BIGINT")
-      .addColumn("ExtractionDate", "DATE")
-      .addColumn("DISCOVERY_DATE","DATE")
-      .addColumn("CONT_DATE","DATE")
-      .addColumn("LATITUDE", "DOUBLE")
-      .addColumn("LONGITUDE", "DOUBLE")
-      .partitionedBy("ExtractionDate", "DISCOVERY_DATE")
-      .execute()
-
     transformedData
       .writeStream
       .option("checkpointLocation", outputTableCheckpointPath)
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
 
         val transformedBatch = transform(batchDF)
+
+        if (batchId == 0) {
+          transformedBatch
+            .write
+            //.partitionBy("ExtractionDate", "DISCOVERY_DATE")
+            .format("delta")
+            .mode("overwrite")
+            .save(s"$outputTableDataPath")
+
+          DBService.createDatabaseIfNotExist(spark, outputDatabaseName)
+          DBService.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, outputTableDataPath)
+
+          spark.sql(s"""
+              SELECT *
+              FROM $outputDatabaseName.$outputTableName
+          """).show()
+        }
 
         import spark.implicits._
 
@@ -114,17 +115,9 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
           .execute()
       }
       .start()
-      .awaitTermination(600000)
+      .awaitTermination(60000)
 
-
-/*
     DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBService.vacuumTable(spark, outputDatabaseName, outputTableName) */
-
-    spark.sql(
-      s"""
-        SELECT *
-        FROM $outputDatabaseName.$outputTableName
-      """).show()
+    DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }
