@@ -7,7 +7,7 @@ case class WorkflowTester(spark: SparkSession) {
   def runBronzePipelines(): Unit = {
     import org.wildfires.etl.bronzemodules._
 
-    //wildfire.Fires(spark).execute()
+    wildfire.Fires(spark).execute()
   }
 
   def runSilverPipelines(): Unit = {
