@@ -21,6 +21,7 @@ object App {
   }
 
   def executeWorkflows(spark: SparkSession): Unit = {
-    WorkflowTester(spark).runBronzePipelines()
+    //WorkflowTester(spark).runBronzePipelines()
+    WorkflowTester(spark).runSilverPipelines()
   }
 }

@@ -13,7 +13,7 @@ case class WorkflowTester(spark: SparkSession) {
   def runSilverPipelines(): Unit = {
     import org.wildfires.etl.silvergoldmodules.firetimetravel._
 
-    //silver.Fires(spark).execute()
+    silver.Fires(spark).execute()
   }
 
   def runGoldPipelines(): Unit = {

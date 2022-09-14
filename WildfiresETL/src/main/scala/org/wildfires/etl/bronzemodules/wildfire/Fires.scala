@@ -17,6 +17,8 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
   val outputTableName = "fires"
 
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
+  val outputTableDataPath = s"$outputTablePath/data"
+  val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
 
   val inputSchema = new StructType()
     .add("OBJECTID", StringType)
@@ -87,8 +89,8 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
       .outputMode("append")
       .partitionBy("ExtractionDate")
       .format("delta")
-      .option("path", s"$outputTablePath/data" )
-      .option("checkpointLocation", s"$outputTablePath/checkpoint")
+      .option("path", outputTableDataPath)
+      .option("checkpointLocation", outputTableCheckpointPath)
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination(60000)
 

@@ -5,17 +5,19 @@ import org.apache.spark.sql.functions.{first, _}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
-import org.wildfires.service.DBService
+import org.wildfires.service._
 
 case class Fires (spark: SparkSession) extends GenericPipeline {
 
-  val inputPath = "src/main/resources/storage/curated/bronze_wildfire.db/fires"
+  val inputPath = "src/main/resources/storage/curated/bronze_wildfire.db/fires/data"
 
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
   val outputDatabaseName ="firetimetravel_silver"
   val outputTableName = "fires"
-
-  val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
+  val outputTablePath =
+    FileService.removePathPrefix(s"$warehousePath/$outputDatabaseName.db/$outputTableName", "file:/" )
+  val outputTableDataPath = s"$outputTablePath/data"
+  val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
 
   override def execute(): Unit = {
     load(extract())
@@ -60,23 +62,26 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
   }
 
   override def load(transformedData: DataFrame): Unit = {
+
     DBService.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
+    FileService.createDirectoryIfNotExist(outputTableDataPath.substring("file:/".length, outputTableDataPath.length))
 
     DeltaTable
       .createIfNotExists(spark)
-      .location(s"$warehousePath/$outputDatabaseName.db/$outputTableName/data")
+      .location(outputTableDataPath)
       .tableName(s"$outputDatabaseName.$outputTableName")
-      .partitionedBy("ExtractionDate", "DISCOVERY_DATE")
       .addColumn("FOD_ID","BIGINT")
       .addColumn("ExtractionDate", "DATE")
       .addColumn("DISCOVERY_DATE","DATE")
       .addColumn("CONT_DATE","DATE")
       .addColumn("LATITUDE", "DOUBLE")
       .addColumn("LONGITUDE", "DOUBLE")
+      .partitionedBy("ExtractionDate", "DISCOVERY_DATE")
       .execute()
 
     transformedData
       .writeStream
+      .option("checkpointLocation", outputTableCheckpointPath)
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
 
         val transformedBatch = transform(batchDF)
@@ -109,10 +114,17 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
           .execute()
       }
       .start()
-      .awaitTermination(60000)
+      .awaitTermination(600000)
+
 
 /*
     DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBService.vacuumTable(spark, outputDatabaseName, outputTableName) */
+
+    spark.sql(
+      s"""
+        SELECT *
+        FROM $outputDatabaseName.$outputTableName
+      """).show()
   }
 }
