@@ -59,6 +59,10 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
     .add("FIPS_NAME", StringType)
     .add("Shape", StringType)
 
+  override def execute(): Unit = {
+    load(transform(extract()))
+  }
+
   override def extract(): Any = {
     spark
       .readStream
