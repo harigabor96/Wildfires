@@ -1,14 +1,14 @@
-package org.wildfires.pipeline.bronze.wildfire
+package org.wildfires.etl.bronzemodules.wildfire
 
 import org.apache.spark.sql.DataFrame
-import org.wildfires.pipeline.GenericPipeline
+import org.wildfires.etl.GenericPipeline
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.types._
 import org.wildfires.service.DBService
-import org.wildfires.pipeline.bronze.wildfire.util.Functions._
+import org.wildfires.etl.bronzemodules.wildfire.util.Functions._
 
-case class Wildfire(spark: SparkSession) extends GenericPipeline {
+case class Fires(spark: SparkSession) extends GenericPipeline {
 
   val inputPath = "src/main/resources/storage/raw/FPA_FOD_20170508/{*}/in"
 

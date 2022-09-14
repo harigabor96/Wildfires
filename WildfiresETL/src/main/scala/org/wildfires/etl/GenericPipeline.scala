@@ -1,4 +1,4 @@
-package org.wildfires.pipeline
+package org.wildfires.etl
 
 import org.apache.spark.sql.DataFrame
 
