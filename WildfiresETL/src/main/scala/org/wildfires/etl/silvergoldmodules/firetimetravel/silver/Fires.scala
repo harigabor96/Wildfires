@@ -1,5 +1,7 @@
 package org.wildfires.etl.silvergoldmodules.firetimetravel.silver
 
-object Fires {
+import org.apache.spark.sql.SparkSession
+
+case class Fires (spark: SparkSession) {
 
 }

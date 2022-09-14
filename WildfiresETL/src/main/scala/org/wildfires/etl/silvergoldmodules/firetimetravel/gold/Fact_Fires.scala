@@ -1,5 +1,7 @@
 package org.wildfires.etl.silvergoldmodules.firetimetravel.gold
 
-object Fact_Fires {
+import org.apache.spark.sql.SparkSession
+
+case class Fact_Fires(spark: SparkSession) {
 
 }
