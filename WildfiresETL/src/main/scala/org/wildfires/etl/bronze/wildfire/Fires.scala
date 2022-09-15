@@ -1,4 +1,4 @@
-package org.wildfires.etl.bronzemodules.wildfire
+package org.wildfires.etl.bronze.wildfire
 
 import org.apache.spark.sql.DataFrame
 import org.wildfires.etl.GenericPipeline
@@ -6,7 +6,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.types._
 import org.wildfires.service.DBService
-import org.wildfires.etl.bronzemodules.wildfire.util.Functions._
+import org.wildfires.etl.bronze.wildfire.util.Functions._
 
 case class Fires(spark: SparkSession) extends GenericPipeline {
 

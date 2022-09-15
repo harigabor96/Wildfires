@@ -1,4 +1,4 @@
-package org.wildfires.etl.silvergoldmodules.firetimetravel.gold
+package org.wildfires.etl.datamart.firetimetravel.gold
 
 import org.apache.spark.sql.SparkSession
 

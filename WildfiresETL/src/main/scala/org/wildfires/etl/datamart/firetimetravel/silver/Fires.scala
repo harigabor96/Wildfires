@@ -1,4 +1,4 @@
-package org.wildfires.etl.silvergoldmodules.firetimetravel.silver
+package org.wildfires.etl.datamart.firetimetravel.silver
 
 import io.delta.tables.DeltaTable
 import org.apache.spark.sql.functions.{first, _}

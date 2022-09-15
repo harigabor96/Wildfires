@@ -1,4 +1,4 @@
-package org.wildfires.etl.bronzemodules.wildfire.util
+package org.wildfires.etl.bronze.wildfire.util
 
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf
