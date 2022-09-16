@@ -4,7 +4,7 @@ import org.apache.spark.sql.SparkSession
 object App {
   def main(args: Array[String]): Unit = {
     val spark = createSparkSession()
-    executeWorkflows(spark)
+    executeWIP(spark)
   }
 
   def createSparkSession(): SparkSession = {
@@ -20,7 +20,7 @@ object App {
     spark
   }
 
-  def executeWorkflows(spark: SparkSession): Unit = {
+  def executeWIP(spark: SparkSession): Unit = {
     //WorkflowTester(spark).runBronzePipelines()
     WorkflowTester(spark).runSilverPipelines()
   }

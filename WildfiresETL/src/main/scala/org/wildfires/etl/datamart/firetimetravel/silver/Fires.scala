@@ -6,13 +6,14 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
 import org.wildfires.service._
+import org.wildfires.etl.datamart.firetimetravel.util.Functions._
 
 case class Fires (spark: SparkSession) extends GenericPipeline {
 
   //This will eventually moved to a config class
   val inputPath = "src/main/resources/storage/curated/bronze_wildfire.db/fires/data"
 
-  val timeoutMs = 60000
+  val timeoutMs = 600000
 
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
   val outputDatabaseName ="firetimetravel_silver"
@@ -39,8 +40,9 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
     extractedDf
       .filter(
         col("FOD_ID").isNotNull && col("FOD_ID") =!= "" &&
-        col("DISCOVERY_DATE").isNotNull && col("DISCOVERY_DATE") =!= "" &&
-        col("CONT_DATE").isNotNull && col("CONT_DATE") =!= "" &&
+        col("FIRE_YEAR").isNotNull && col("FIRE_YEAR") =!= "" &&
+        col("DISCOVERY_DOY").isNotNull && col("DISCOVERY_DOY") =!= "" &&
+        col("CONT_DOY").isNotNull && col("CONT_DOY") =!= "" &&
         col("LATITUDE").isNotNull && col("LATITUDE") =!= "" &&
         col("LONGITUDE").isNotNull && col("LONGITUDE") =!= ""
       )
@@ -49,16 +51,17 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
       )
       .agg(
         first("ExtractionDate").as("ExtractionDate"),
-        first("DISCOVERY_DATE").as("DISCOVERY_DATE"),
-        first("CONT_DATE").as("CONT_DATE"),
+        first("FIRE_YEAR").as("FIRE_YEAR"),
+        first("DISCOVERY_DOY").as("DISCOVERY_DOY"),
+        first("CONT_DOY").as("CONT_DOY"),
         first("LATITUDE").as("LATITUDE"),
         first("LONGITUDE").as("LONGITUDE")
       )
       .select(
         col("ExtractionDate"),
         col("FOD_ID"),
-        col("DISCOVERY_DATE").as("DISCOVERY_DATE"),
-        col("CONT_DATE").as("CONT_DATE"),
+        getDate(col("FIRE_YEAR"), col("DISCOVERY_DOY")).as("DiscoveryDate"),
+        getDate(col("FIRE_YEAR"), col("CONT_DOY")).as("ContDate"),
         col("LATITUDE").cast(DoubleType),
         col("LONGITUDE").cast(DoubleType)
       )
@@ -76,7 +79,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
         if (batchId == 0) {
           transformedBatch
             .write
-            .partitionBy("DISCOVERY_DATE")
+            .partitionBy("DiscoveryDate")
             .format("delta")
             .mode("overwrite")
             .save(s"$outputTableDataPath")
@@ -89,7 +92,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
 
         val batchEventDates =
           transformedBatch
-            .select(col("DISCOVERY_DATE"))
+            .select(col("DiscoveryDate"))
             .dropDuplicates()
             .map(_.getString(0))
             .collect()
@@ -101,7 +104,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
           .merge(
             transformedBatch.as("updates"),
             s"""
-                deltaTable.DISCOVERY_DATE IN ('$batchEventDates')
+                deltaTable.DiscoveryDate IN ('$batchEventDates')
                 AND
                 (
                   deltaTable.FOD_ID <=> updates.FOD_ID
@@ -114,11 +117,6 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
       }
       .start()
       .awaitTermination(timeoutMs)
-
-    spark.sql(s"""
-              SELECT *
-              FROM $outputDatabaseName.$outputTableName
-          """).show()
 
     DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
