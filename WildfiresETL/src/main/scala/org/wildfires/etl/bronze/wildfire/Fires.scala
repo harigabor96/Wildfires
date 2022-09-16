@@ -14,7 +14,7 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
 
   val timeoutMs = 60000
 
-  val inputPath = "src/main/resources/storage/raw/FPA_FOD_20170508/{*}/in"
+  val inputPath = "../storage/raw/FPA_FOD_20170508/{*}/in"
 
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
 

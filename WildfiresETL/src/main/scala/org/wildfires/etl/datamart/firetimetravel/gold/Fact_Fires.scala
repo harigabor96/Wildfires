@@ -4,8 +4,8 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
 import org.wildfires.service.{DBService, FileService}
 
-case class Fact_Fires(spark: SparkSession) extends GenericPipeline {
-
+case class Fact_Fires(spark: SparkSession) /* extends GenericPipeline */ {
+/*
   //This will eventually moved to a config class
   val inputPath = "src/main/resources/storage/curated/firetimetravel_silver.db/fires/data"
 
@@ -59,4 +59,6 @@ case class Fact_Fires(spark: SparkSession) extends GenericPipeline {
 
     DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
+
+ */
 }

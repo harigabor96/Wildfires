@@ -11,7 +11,7 @@ object App {
     val spark = SparkSession
       .builder()
       .appName("Wildfires")
-      .config("spark.sql.warehouse.dir", "src/main/resources/storage/curated")
+      .config("spark.sql.warehouse.dir", "../storage/curated")
       .master("local")
       .getOrCreate()
 
@@ -21,8 +21,17 @@ object App {
   }
 
   def executeWIP(spark: SparkSession): Unit = {
-    //WorkflowTester(spark).runBronzePipelines()
-    //WorkflowTester(spark).runSilverPipelines()
-    //WorkflowTester(spark).runGoldPipelines()
+    import org.wildfires.etl.bronze._
+    import org.wildfires.etl.datamart._
+/*
+    spark
+      .read
+      .format("delta")
+      .load("../storage/curated/bronze_wildfire.db/fires/data")
+      .show() */
+
+    //wildfire.Fires(spark).execute()
+    //firetimetravel.silver.Fires(spark).execute()
+    //firetimetravel.gold.Fact_Fires(spark).execute()
   }
 }

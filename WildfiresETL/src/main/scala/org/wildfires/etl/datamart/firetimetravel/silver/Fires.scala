@@ -11,15 +11,14 @@ import org.wildfires.etl.datamart.firetimetravel.util.Functions._
 case class Fires (spark: SparkSession) extends GenericPipeline {
 
   //This will eventually moved to a config class
-  val inputPath = "src/main/resources/storage/curated/bronze_wildfire.db/fires/data"
+  val inputPath = "../storage/curated/bronze_wildfire.db/fires/data"
 
   val timeoutMs = 600000
 
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
   val outputDatabaseName ="firetimetravel_silver"
   val outputTableName = "fires"
-  val outputTablePath =
-    FileService.removePathPrefix(s"$warehousePath/$outputDatabaseName.db/$outputTableName", "file:/" )
+  val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
   val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
 
