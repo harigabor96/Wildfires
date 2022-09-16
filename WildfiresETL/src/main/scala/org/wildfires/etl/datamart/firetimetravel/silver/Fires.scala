@@ -9,7 +9,10 @@ import org.wildfires.service._
 
 case class Fires (spark: SparkSession) extends GenericPipeline {
 
+  //This will eventually moved to a config class
   val inputPath = "src/main/resources/storage/curated/bronze_wildfire.db/fires/data"
+
+  val timeoutMs = 60000
 
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
   val outputDatabaseName ="firetimetravel_silver"
@@ -73,18 +76,13 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
         if (batchId == 0) {
           transformedBatch
             .write
-            //.partitionBy("ExtractionDate", "DISCOVERY_DATE")
+            .partitionBy("DISCOVERY_DATE")
             .format("delta")
             .mode("overwrite")
             .save(s"$outputTableDataPath")
 
           DBService.createDatabaseIfNotExist(spark, outputDatabaseName)
           DBService.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, outputTableDataPath)
-
-          spark.sql(s"""
-              SELECT *
-              FROM $outputDatabaseName.$outputTableName
-          """).show()
         }
 
         import spark.implicits._
@@ -115,7 +113,12 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
           .execute()
       }
       .start()
-      .awaitTermination(60000)
+      .awaitTermination(timeoutMs)
+
+    spark.sql(s"""
+              SELECT *
+              FROM $outputDatabaseName.$outputTableName
+          """).show()
 
     DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBService.vacuumTable(spark, outputDatabaseName, outputTableName)

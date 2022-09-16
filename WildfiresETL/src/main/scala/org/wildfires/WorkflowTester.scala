@@ -1,8 +1,6 @@
 package org.wildfires
 
 import org.apache.spark.sql.SparkSession
-import org.wildfires.etl.bronze.wildfire.Fires
-import org.wildfires.etl.datamart.firetimetravel.silver
 
 case class WorkflowTester(spark: SparkSession) {
 

@@ -10,12 +10,16 @@ import org.wildfires.etl.bronze.wildfire.util.Functions._
 
 case class Fires(spark: SparkSession) extends GenericPipeline {
 
+  //This will eventually moved to a config class
+
+  val timeoutMs = 60000
+
   val inputPath = "src/main/resources/storage/raw/FPA_FOD_20170508/{*}/in"
 
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
+
   val outputDatabaseName ="bronze_wildfire"
   val outputTableName = "fires"
-
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
   val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
@@ -68,7 +72,7 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
   override def extract(): Any = {
     spark
       .readStream
-      .option("sep", ",")
+      .option("sep", "\t")
       .option("header", "true")
       .schema(inputSchema)
       .csv(inputPath)
@@ -92,7 +96,7 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
       .option("path", outputTableDataPath)
       .option("checkpointLocation", outputTableCheckpointPath)
       .toTable(s"$outputDatabaseName.$outputTableName")
-      .awaitTermination(60000)
+      .awaitTermination(timeoutMs)
 
     DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
