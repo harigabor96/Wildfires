@@ -1,4 +1,4 @@
-package org.wildfires.etl.datamart.firetimetravel.gold
+package org.wildfires.etl.datamarts.firetimetravel.gold
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline

@@ -1,4 +1,4 @@
-package org.wildfires.etl.datamart.firetimetravel.silver
+package org.wildfires.etl.datamarts.firetimetravel.silver
 
 import io.delta.tables.DeltaTable
 import org.apache.spark.sql.functions.{first, _}
@@ -6,7 +6,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
 import org.wildfires.service._
-import org.wildfires.etl.datamart.firetimetravel.util.Functions._
+import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
 
 case class Fires (spark: SparkSession) extends GenericPipeline {
 

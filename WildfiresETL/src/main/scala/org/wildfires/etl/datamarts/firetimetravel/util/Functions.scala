@@ -1,4 +1,4 @@
-package org.wildfires.etl.datamart.firetimetravel.util
+package org.wildfires.etl.datamarts.firetimetravel.util
 
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf

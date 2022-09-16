@@ -24,7 +24,7 @@ object App {
   def executeWIP(spark: SparkSession): Unit = {
     import org.apache.spark.sql.functions.col
     import org.wildfires.etl.bronze._
-    import org.wildfires.etl.datamart._
+    import org.wildfires.etl.datamarts._
 
     /*
     spark
