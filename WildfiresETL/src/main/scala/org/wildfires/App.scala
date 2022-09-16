@@ -27,23 +27,28 @@ object App {
     import org.wildfires.etl.datamarts._
 
     /*
-    spark
-      .read
-      .format("delta")
-      .load("../storage/curated/bronze_wildfire.db/fires/data")
-      .show()
-      */
+    val bronze =
+      spark
+        .read
+        .format("delta")
+        .load("../storage/curated/bronze_wildfire.db/fires/data")
+        .show()
 
-    /*
     val silver =
       spark
         .read
         .format("delta")
         .load("../storage/curated/firetimetravel_silver.db/fires/data")
+
+    val gold =
+      spark
+        .read
+        .format("delta")
+        .load("../storage/curated/firetimetravel_gold.db/fact_fire/data")
     */
 
     //wildfire.Fires(spark).execute()
     //firetimetravel.silver.Fires(spark).execute()
-    firetimetravel.gold.Fact_Fire(spark).execute()
+    //firetimetravel.gold.Fact_Fire(spark).execute()
   }
 }
