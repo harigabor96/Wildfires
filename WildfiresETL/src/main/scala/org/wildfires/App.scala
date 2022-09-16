@@ -22,6 +22,7 @@ object App {
 
   def executeWIP(spark: SparkSession): Unit = {
     //WorkflowTester(spark).runBronzePipelines()
-    WorkflowTester(spark).runSilverPipelines()
+    //WorkflowTester(spark).runSilverPipelines()
+    WorkflowTester(spark).runGoldPipelines()
   }
 }

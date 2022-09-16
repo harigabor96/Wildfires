@@ -17,6 +17,9 @@ case class WorkflowTester(spark: SparkSession) {
   }
 
   def runGoldPipelines(): Unit = {
+    import org.wildfires.etl.datamart._
+
+    firetimetravel.gold.Fact_Fires(spark).execute()
 
   }
 }
