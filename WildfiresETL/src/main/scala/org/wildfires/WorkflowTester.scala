@@ -20,6 +20,5 @@ case class WorkflowTester(spark: SparkSession) {
     import org.wildfires.etl.datamart._
 
     firetimetravel.gold.Fact_Fires(spark).execute()
-
   }
 }

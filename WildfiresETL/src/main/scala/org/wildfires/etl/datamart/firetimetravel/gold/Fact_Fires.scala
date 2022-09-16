@@ -32,7 +32,6 @@ case class Fact_Fires(spark: SparkSession) extends GenericPipeline {
 
   override def transform(extractedData: Any): DataFrame = {
     val extractedDf = extractedData.asInstanceOf[DataFrame]
-    extractedDf.show()
     extractedDf
   }
 
