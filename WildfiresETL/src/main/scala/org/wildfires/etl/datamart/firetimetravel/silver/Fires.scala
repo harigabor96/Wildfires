@@ -10,7 +10,6 @@ import org.wildfires.etl.datamart.firetimetravel.util.Functions._
 
 case class Fires (spark: SparkSession) extends GenericPipeline {
 
-  //This will eventually moved to a config class
   val inputPath = "../storage/curated/bronze_wildfire.db/fires/data"
 
   val timeoutMs = 600000
@@ -33,8 +32,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
       .load(inputPath)
   }
 
-  override def transform(extractedData: Any): DataFrame = {
-    val extractedDf = extractedData.asInstanceOf[DataFrame]
+  override def transform(extractedDf: DataFrame): DataFrame = {
 
     extractedDf
       .filter(
@@ -66,9 +64,9 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
       )
   }
 
-  override def load(transformedData: DataFrame): Unit = {
+  override def load(transformedDf: DataFrame): Unit = {
 
-    transformedData
+    transformedDf
       .writeStream
       .option("checkpointLocation", outputTableCheckpointPath)
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>

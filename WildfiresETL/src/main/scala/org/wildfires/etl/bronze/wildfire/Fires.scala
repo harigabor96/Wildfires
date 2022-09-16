@@ -10,8 +10,6 @@ import org.wildfires.etl.bronze.wildfire.util.Functions._
 
 case class Fires(spark: SparkSession) extends GenericPipeline {
 
-  //This will eventually moved to a config class
-
   val timeoutMs = 60000
 
   val inputPath = "../storage/raw/FPA_FOD_20170508/{*}/in"
@@ -69,7 +67,7 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
     load(transform(extract()))
   }
 
-  override def extract(): Any = {
+  override def extract(): DataFrame = {
     spark
       .readStream
       .option("sep", "\t")
@@ -78,17 +76,16 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
       .csv(inputPath)
   }
 
-  override def transform(extractedData: Any): DataFrame = {
-    val extractedDf = extractedData.asInstanceOf[DataFrame]
+  override def transform(extractedDf: DataFrame): DataFrame = {
 
     extractedDf
       .withColumn("ExtractionDate", getExtractionDate(input_file_name()))
   }
 
-  override def load(transformedData: DataFrame): Unit = {
+  override def load(transformedDf: DataFrame): Unit = {
     DBService.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
 
-    transformedData
+    transformedDf
       .writeStream
       .outputMode("append")
       .partitionBy("ExtractionDate")

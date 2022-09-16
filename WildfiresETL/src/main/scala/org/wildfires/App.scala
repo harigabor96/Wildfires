@@ -1,4 +1,5 @@
 package org.wildfires
+
 import org.apache.spark.sql.SparkSession
 
 object App {
@@ -21,17 +22,28 @@ object App {
   }
 
   def executeWIP(spark: SparkSession): Unit = {
+    import org.apache.spark.sql.functions.col
     import org.wildfires.etl.bronze._
     import org.wildfires.etl.datamart._
-/*
+
+    /*
     spark
       .read
       .format("delta")
       .load("../storage/curated/bronze_wildfire.db/fires/data")
-      .show() */
+      .show()
+      */
+
+    /*
+    val silver =
+      spark
+        .read
+        .format("delta")
+        .load("../storage/curated/firetimetravel_silver.db/fires/data")
+    */
 
     //wildfire.Fires(spark).execute()
     //firetimetravel.silver.Fires(spark).execute()
-    //firetimetravel.gold.Fact_Fires(spark).execute()
+    firetimetravel.gold.Fact_Fire(spark).execute()
   }
 }
