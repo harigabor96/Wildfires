@@ -26,8 +26,8 @@ case class Fact_Fire(spark: SparkSession) extends GenericPipeline {
       .load(inputPath)
   }
 
-  override def transform(extractedDf: DataFrame): DataFrame = {
-    extractedDf
+  override def transform(extractedData: Any): DataFrame = {
+    extractedData.asInstanceOf[DataFrame]
   }
 
   override def load(transformedDf: DataFrame): Unit = {

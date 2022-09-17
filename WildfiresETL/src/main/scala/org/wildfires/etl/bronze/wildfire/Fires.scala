@@ -73,7 +73,8 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
       .csv(inputPath)
   }
 
-  override def transform(extractedDf: DataFrame): DataFrame = {
+  override def transform(extractedData: Any): DataFrame = {
+    val extractedDf = extractedData.asInstanceOf[DataFrame]
 
     extractedDf
       .withColumn("ExtractionDate", getExtractionDate(input_file_name()))
