@@ -25,20 +25,25 @@ object App {
     import org.apache.spark.sql.functions.col
     import org.wildfires.etl._
 
-    /*
-    val bronze =
+    bronze.wildfire.Fires(spark).execute()
+    //datamarts.firetimetravel.silver.Fires(spark).execute()
+    //firetimetravel.gold.Fact_Fire(spark).execute()
+
+    val bronzeDf =
       spark
         .read
         .format("delta")
         .load("../storage/curated/bronze_wildfire.db/fires/data")
-        .show()
 
+    /*
     val silver =
       spark
         .read
         .format("delta")
         .load("../storage/curated/firetimetravel_silver.db/fires/data")
+     */
 
+    /*
     val gold =
       spark
         .read
@@ -46,17 +51,6 @@ object App {
         .load("../storage/curated/firetimetravel_gold.db/fact_fire/data")
     */
 
-    //bronze.wildfire.Fires(spark).execute()
-    datamarts.firetimetravel.silver.Fires(spark).execute()
-    //firetimetravel.gold.Fact_Fire(spark).execute()
-
-    val silver =
-      spark
-        .read
-        .format("delta")
-        .load("../storage/curated/firetimetravel_silver.db/fires/data")
-
-    silver.show()
-    println(silver.count())
+    println(bronzeDf.count())
   }
 }
