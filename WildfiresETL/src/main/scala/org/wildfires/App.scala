@@ -23,8 +23,7 @@ object App {
 
   def executeWIP(spark: SparkSession): Unit = {
     import org.apache.spark.sql.functions.col
-    import org.wildfires.etl.bronze._
-    import org.wildfires.etl.datamarts._
+    import org.wildfires.etl._
 
     /*
     val bronze =
@@ -47,8 +46,17 @@ object App {
         .load("../storage/curated/firetimetravel_gold.db/fact_fire/data")
     */
 
-    //wildfire.Fires(spark).execute()
-    //firetimetravel.silver.Fires(spark).execute()
+    //bronze.wildfire.Fires(spark).execute()
+    datamarts.firetimetravel.silver.Fires(spark).execute()
     //firetimetravel.gold.Fact_Fire(spark).execute()
+
+    val silver =
+      spark
+        .read
+        .format("delta")
+        .load("../storage/curated/firetimetravel_silver.db/fires/data")
+
+    silver.show()
+    println(silver.count())
   }
 }

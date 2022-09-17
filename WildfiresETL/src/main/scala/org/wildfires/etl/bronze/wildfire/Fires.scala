@@ -4,18 +4,15 @@ import org.apache.spark.sql.DataFrame
 import org.wildfires.etl.GenericPipeline
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
+import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.types._
 import org.wildfires.service.DBService
 import org.wildfires.etl.bronze.wildfire.util.Functions._
 
 case class Fires(spark: SparkSession) extends GenericPipeline {
 
-  val timeoutMs = 60000
-
   val inputPath = "../storage/raw/FPA_FOD_20170508/{*}/in"
-
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-
   val outputDatabaseName ="bronze_wildfire"
   val outputTableName = "fires"
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
@@ -87,13 +84,14 @@ case class Fires(spark: SparkSession) extends GenericPipeline {
 
     transformedDf
       .writeStream
+      .trigger(Trigger.AvailableNow())
       .outputMode("append")
       .partitionBy("ExtractionDate")
       .format("delta")
       .option("path", outputTableDataPath)
       .option("checkpointLocation", outputTableCheckpointPath)
       .toTable(s"$outputDatabaseName.$outputTableName")
-      .awaitTermination(timeoutMs)
+      .awaitTermination()
 
     DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
