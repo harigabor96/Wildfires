@@ -27,7 +27,7 @@ object App {
 
     //bronze.wildfire.Fires(spark).execute()
     //datamarts.firetimetravel.silver.Fires(spark).execute()
-    //firetimetravel.gold.Fact_Fire(spark).execute()
+    datamarts.firetimetravel.gold.Dim_Date(spark).execute()
 
     /*
     val bronzeDf =
