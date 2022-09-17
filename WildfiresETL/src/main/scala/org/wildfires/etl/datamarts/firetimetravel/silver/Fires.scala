@@ -3,7 +3,6 @@ package org.wildfires.etl.datamarts.firetimetravel.silver
 import io.delta.tables.DeltaTable
 import org.apache.spark.sql.functions.{first, _}
 import org.apache.spark.sql.streaming.Trigger
-import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
 import org.wildfires.service._
@@ -38,20 +37,10 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
         col("FIRE_YEAR").isNotNull && col("FIRE_YEAR") =!= "" &&
         col("LATITUDE").isNotNull && col("LATITUDE") =!= "" &&
         col("LONGITUDE").isNotNull && col("LONGITUDE") =!= "" &&
-        (
-          (col("DISCOVERY_DOY").isNotNull && col("DISCOVERY_DOY") =!= "")
-          ||
-          (col("CONT_DOY").isNotNull && col("CONT_DOY") =!= "")
-        )
+        col("DISCOVERY_DOY").isNotNull && col("DISCOVERY_DOY") =!= ""
       )
       .withColumn("DiscoveryDate",
-        when(
-          col("DISCOVERY_DOY").isNull || col("DISCOVERY_DOY") === "",
-          getDate(col("FIRE_YEAR"), col("CONT_DOY"))
-        )
-        .otherwise(
-          getDate(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
-        )
+        getDate(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
       )
       .withColumn("ContDate",
         when(
