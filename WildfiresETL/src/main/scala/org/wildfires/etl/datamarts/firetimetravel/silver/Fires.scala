@@ -4,16 +4,18 @@ import io.delta.tables.DeltaTable
 import org.apache.spark.sql.functions.{first, _}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.wildfires.etl.{GenericPipeline, PipelineConfig}
+import org.wildfires.etl.{GenericPipeline}
 import org.wildfires.service._
 import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
 
-case class Fires (spark: SparkSession, config: PipelineConfig) extends GenericPipeline {
+case class Fires (spark: SparkSession) extends GenericPipeline {
 
-  val inputPath = config.inputPath
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-  val outputDatabaseName = config.outputDatabase
-  val outputTableName = config.outputTable
+
+  val inputPath = s"$warehousePath/bronze_wildfire.db/fires/data"
+
+  val outputDatabaseName = "dm_firetimetravel_silver"
+  val outputTableName = "fires"
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
   val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
