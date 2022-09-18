@@ -2,7 +2,7 @@
 
 The purpose of this project is to show my skills in modern data engineering and data architecture with Apache Spark, Scala, and Azure Databricks, and to serve as a source of best practices for myself. The architecture described here is my own work and it tries to reconcile my first-hand experience with traditional data warehousing practices like Ralph Kimball’s and Bill Inmon’s works and with newly emerging practices, most notably Maxime Beauchemin’s Functional Data Engineering.
 ## The Architecture
-![alt text](https://github.com/harigabor96/Wildfires/blob/main/Architecture.jpg?raw=true)
+![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
 
 This design pattern is expected to be general-purpose which means that:
 - It should support any type of analysis (BI, ML, AI, Ad-Hoc, etc.).
@@ -37,7 +37,7 @@ The source dataset can be found at:
  - The storage folder contains the "sample" version of Data Lakehouse with a raw zone containing .csv files in a folder structure and a curated zone containing the usual delta tables.
  - The .pbix report contains a very simple report to visualize the output data. This report is without errors but isn't optimized according to BI best practices, as I don't have a way to simulate Databricks SQL.
  
-![alt text](https://github.com/harigabor96/Wildfires/blob/main/FireTimeTravel.PNG?raw=true)
+![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/FireTimeTravel.PNG?raw=true)
 
 ### WIP/Backlog
  - Pipeline selection with command line parameter
