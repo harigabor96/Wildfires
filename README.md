@@ -27,13 +27,17 @@ Partially because of this, I decided to prefix the tables of the Gold Zone eithe
 
 The final element of the architecture is a powerful query engine (Photon) and an advanced query editor (Databricks SQL) which lets the user create aggregations and integration efficiently. Here Dimensions and Facts can be extracted, indexed, joined, etc. from the Snapshot and Archive tables to create datasets that are ready for analysis.
 ## The Project
-The scope of the project is nothing special as it only transforms and visualizes one source table containing historical geographical data of US Wildfires that can be found at:
+The scope of the project is nothing special as it only transforms and visualizes one source table containing historical geographical data of US Wildfires. 
+
+The source dataset can be found at:
 [https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires)
 
 ### Components
  - The "WildfiresETL" Scala project applies all the above rules to the ETL process as well as a clean project structure and consistent naming conventions. 
  - The storage folder contains the "sample" version of Data Lakehouse with a raw zone containing .csv files in a folder structure and a curated zone containing the usual delta tables.
  - The .pbix report contains a very simple report to visualize the output data. This report is without errors but isn't optimized according to BI best practices, as I don't have a way to simulate Databricks SQL.
+ 
+![alt text](https://github.com/harigabor96/Wildfires/blob/main/FireTimeTravel.PNG?raw=true)
 
 ### WIP/Backlog
  - Pipeline selection with command line parameter
