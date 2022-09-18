@@ -5,7 +5,7 @@ import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
 import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
-import org.wildfires.service.DBService
+import org.wildfires.util.DBUtils
 
 case class Arch_Fire(spark: SparkSession) extends GenericPipeline {
 
@@ -43,7 +43,7 @@ case class Arch_Fire(spark: SparkSession) extends GenericPipeline {
   }
 
   override def load(transformedDf: DataFrame): Unit = {
-    DBService.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
+    DBUtils.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
 
     transformedDf
       .writeStream
@@ -55,7 +55,7 @@ case class Arch_Fire(spark: SparkSession) extends GenericPipeline {
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
 
-    DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }

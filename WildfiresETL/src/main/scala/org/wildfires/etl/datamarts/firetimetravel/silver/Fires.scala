@@ -5,7 +5,7 @@ import org.apache.spark.sql.functions.{first, _}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.{GenericPipeline}
-import org.wildfires.service._
+import org.wildfires.util._
 import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
 
 case class Fires (spark: SparkSession) extends GenericPipeline {
@@ -83,8 +83,8 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
             .mode("overwrite")
             .save(s"$outputTableDataPath")
 
-          DBService.createDatabaseIfNotExist(spark, outputDatabaseName)
-          DBService.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, outputTableDataPath)
+          DBUtils.createDatabaseIfNotExist(spark, outputDatabaseName)
+          DBUtils.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, outputTableDataPath)
         }
 
         import spark.implicits._
@@ -121,7 +121,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
       .start()
       .awaitTermination()
 
-    DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }

@@ -6,13 +6,15 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.types._
-import org.wildfires.service.DBService
+import org.wildfires.util.DBUtils
 import org.wildfires.etl.bronze.wildfire.util.Functions._
 
-case class Fires(spark: SparkSession, rawPathPattern: String) extends GenericPipeline {
+case class Fires(spark: SparkSession, rawZonePath: String) extends GenericPipeline {
 
-  val inputPath = rawPathPattern
+  val inputPath = s"$rawZonePath/FPA_FOD_20170508/{*}/in"
+
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
+
   val outputDatabaseName = "bronze_wildfire"
   val outputTableName = "fires"
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
@@ -79,7 +81,7 @@ case class Fires(spark: SparkSession, rawPathPattern: String) extends GenericPip
   }
 
   override def load(transformedDf: DataFrame): Unit = {
-    DBService.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
+    DBUtils.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
 
     transformedDf
       .writeStream
@@ -92,7 +94,7 @@ case class Fires(spark: SparkSession, rawPathPattern: String) extends GenericPip
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
 
-    DBService.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBService.vacuumTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }
