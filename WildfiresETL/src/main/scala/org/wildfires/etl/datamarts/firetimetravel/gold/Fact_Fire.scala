@@ -1,5 +1,6 @@
 package org.wildfires.etl.datamarts.firetimetravel.gold
 
+import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
@@ -28,6 +29,14 @@ case class Fact_Fire(spark: SparkSession) extends GenericPipeline {
 
   override def transform(extractedDf: DataFrame): DataFrame = {
     extractedDf
+      .select(
+        col("FOD_ID"),
+        col("FIRE_YEAR"),
+        col("DiscoveryDate"),
+        col("ContDate"),
+        col("LATITUDE"),
+        col("LONGITUDE"),
+      )
   }
 
   override def load(transformedDf: DataFrame): Unit = {

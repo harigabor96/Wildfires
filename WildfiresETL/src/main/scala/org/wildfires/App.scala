@@ -27,7 +27,7 @@ object App {
 
     //bronze.wildfire.Fires(spark).execute()
     //datamarts.firetimetravel.silver.Fires(spark).execute()
-    datamarts.firetimetravel.gold.Fact_Fire(spark).execute()
+    //datamarts.firetimetravel.gold.Fact_Fire(spark).execute()
 
     /*
     val bronzeDf =
@@ -43,7 +43,8 @@ object App {
         .read
         .format("delta")
         .load("../storage/curated/firetimetravel_silver.db/fires/data")
-    */
+
+    silver.show() */
 
     /*
     val gold =
