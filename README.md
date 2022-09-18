@@ -39,7 +39,6 @@ The final element of the architecture is a powerful query engine (Photon) which 
 The scope of the project is nothing special as it only transforms and visualizes one source table containing historical geographical data of US Wildfires. 
 
 The source dataset can be found at:
-
 [https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires)
 
 ### Components
