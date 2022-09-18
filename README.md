@@ -12,20 +12,25 @@ This design pattern is expected to be general-purpose which means that:
 - It should not lose data or create data errors.
 - It should not be affected by late arriving data.
 
-In its’ current state, the architecture is able to satisfy all of the above criteria, provided that a powerful query engine like Photon (Databricks SQL) supports it. The main idea behind the architecture originates from Inmon, in a way that data should only be persisted at the lowest (and even lower) granularity, which makes late arriving data a non-issue. 
+### Independent Data Marts
+The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should not contain contradictory information. This effectively means that incorrect but consistent ETL is preferred to divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". However in my opinion there is no better single source of truth than a data lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by Data Marts (Silver, Gold, Databricks SQL).
 
+### Granularity and Late Arriving Data
+The main idea behind the architecture originates from Inmon, in a way that data should only be persisted at the lowest (and even lower) granularity, which makes late arriving data a non-issue. Of course, this means query time aggregations, which only work when a powerful query engine like Photon (Databricks SQL) is present as the final layer of the architecture.
+
+### Snapshot/Archive Schema
 The schema for the final persistence layer (Gold Zone) is my own creation and it draws from OLTP database design (specifically the posting mechanism of ERP systems) and functional programming. My key observation here was that data present in the source is either:
-- A closed transaction, that is never changed again, which means it’s immutable.
--	An open transaction, that is subject to changes, which means it’s mutable.
+- A closed record, that is never changed again, which means it’s immutable.
+-	An open record, that is subject to changes, which means it’s mutable.
 
 My solution is to represent this duality in the Data Lakehouse:
--	Closed transactions should be treated as Archives.
--	Open transactions should be treated as Snapshots.
--	Tables with mixed transactions should be separated. When it’s not possible to do so, they should either be treated as a Snapshot or an updateable Archive.
+-	Closed records should be treated as Archives.
+-	Open records should be treated as Snapshots.
+-	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as a Snapshot or an updateable Archive.
 
-Partially because of this, I decided to prefix the tables of the Gold Zone either as Snap_ or Arch_ rather than a Dim_ or a Fact_ and name this pattern the Snapshot/Archive Schema.
-
+### Aggregation and Integration
 The final element of the architecture is a powerful query engine (Photon) and an advanced query editor (Databricks SQL) which lets the user create aggregations and integration efficiently. Here Dimensions and Facts can be extracted, indexed, joined, etc. from the Snapshot and Archive tables to create datasets that are ready for analysis.
+
 ## The Project
 The scope of the project is nothing special as it only transforms and visualizes one source table containing historical geographical data of US Wildfires. 
 
