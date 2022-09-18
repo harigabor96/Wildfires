@@ -23,7 +23,7 @@ object App {
 
   def executeWIP(spark: SparkSession): Unit = {
     import org.wildfires.etl._
-
+/*
     bronze.wildfire.Fires(
         spark,
         PipelineConfig(
@@ -45,30 +45,15 @@ object App {
     datamarts.firetimetravel.gold.Fact_Fire(
       spark,
       PipelineConfig(
-        "../storage/curated/firetimetravel_silver.db/fires/data",
+        "../storage/curated/dm_firetimetravel_silver.db/fires/data",
         "dm_firetimetravel_gold",
         "fact_fire"
       )
       ).execute()
+    */
 
-    /*
-    val bronzeDf =
-      spark
-        .read
-        .format("delta")
-        .load("../storage/curated/bronze_wildfire.db/fires/data")
-
-    val silver =
-      spark
-        .read
-        .format("delta")
-        .load("../storage/curated/firetimetravel_silver.db/fires/data")
-
-    val gold =
-      spark
-        .read
-        .format("delta")
-        .load("../storage/curated/firetimetravel_gold.db/fact_fire/data")
-   */
+    //val bronzeDf = spark.read.format("delta").load("../storage/curated/bronze_wildfire.db/fires/data")
+    //val silver = spark.read.format("delta").load("../storage/curated/dm_firetimetravel_silver.db/fires/data")
+    //val gold = spark.read.format("delta").load("../storage/curated/dm_firetimetravel_gold.db/fact_fire/data")
   }
 }
