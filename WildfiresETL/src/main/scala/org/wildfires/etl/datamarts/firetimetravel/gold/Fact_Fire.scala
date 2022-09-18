@@ -3,16 +3,16 @@ package org.wildfires.etl.datamarts.firetimetravel.gold
 import org.apache.spark.sql.functions.{col, explode_outer}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.wildfires.etl.GenericPipeline
+import org.wildfires.etl.{GenericPipeline, PipelineConfig}
 import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
 import org.wildfires.service.DBService
 
-case class Fact_Fire(spark: SparkSession) extends GenericPipeline {
+case class Fact_Fire(spark: SparkSession, config: PipelineConfig) extends GenericPipeline {
 
-  val inputPath = "../storage/curated/firetimetravel_silver.db/fires/data"
+  val inputPath = config.inputPath
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-  val outputDatabaseName ="dm_firetimetravel_gold"
-  val outputTableName = "fact_fire"
+  val outputDatabaseName = config.outputDatabase
+  val outputTableName = config.outputTable
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
   val outputTableCheckpointPath = s"$outputTablePath/checkpoint"

@@ -1,7 +1,7 @@
 package org.wildfires.etl.bronze.wildfire
 
 import org.apache.spark.sql.DataFrame
-import org.wildfires.etl.GenericPipeline
+import org.wildfires.etl.{GenericPipeline, PipelineConfig}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.streaming.Trigger
@@ -9,12 +9,12 @@ import org.apache.spark.sql.types._
 import org.wildfires.service.DBService
 import org.wildfires.etl.bronze.wildfire.util.Functions._
 
-case class Fires(spark: SparkSession) extends GenericPipeline {
+case class Fires(spark: SparkSession, config: PipelineConfig) extends GenericPipeline {
 
-  val inputPath = "../storage/raw/FPA_FOD_20170508/{*}/in"
+  val inputPath = config.inputPath
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-  val outputDatabaseName ="bronze_wildfire"
-  val outputTableName = "fires"
+  val outputDatabaseName = config.outputDatabase
+  val outputTableName = config.outputTable
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
   val outputTableCheckpointPath = s"$outputTablePath/checkpoint"

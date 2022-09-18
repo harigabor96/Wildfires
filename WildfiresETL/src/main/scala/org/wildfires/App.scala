@@ -22,12 +22,34 @@ object App {
   }
 
   def executeWIP(spark: SparkSession): Unit = {
-    import org.apache.spark.sql.functions.col
     import org.wildfires.etl._
 
-    //bronze.wildfire.Fires(spark).execute()
-    //datamarts.firetimetravel.silver.Fires(spark).execute()
-    //datamarts.firetimetravel.gold.Fact_Fire(spark).execute()
+    bronze.wildfire.Fires(
+        spark,
+        PipelineConfig(
+          "../storage/raw/FPA_FOD_20170508/{*}/in",
+          "bronze_wildfire",
+          "fires"
+        )
+      ).execute()
+
+    datamarts.firetimetravel.silver.Fires(
+      spark,
+      PipelineConfig(
+        "../storage/curated/bronze_wildfire.db/fires/data",
+        "dm_firetimetravel_silver",
+        "fires"
+      )
+    ).execute()
+
+    datamarts.firetimetravel.gold.Fact_Fire(
+      spark,
+      PipelineConfig(
+        "../storage/curated/firetimetravel_silver.db/fires/data",
+        "dm_firetimetravel_gold",
+        "fact_fire"
+      )
+      ).execute()
 
     /*
     val bronzeDf =
@@ -35,7 +57,6 @@ object App {
         .read
         .format("delta")
         .load("../storage/curated/bronze_wildfire.db/fires/data")
-    */
 
     val silver =
       spark
@@ -43,17 +64,11 @@ object App {
         .format("delta")
         .load("../storage/curated/firetimetravel_silver.db/fires/data")
 
-    println(silver.count())
-
     val gold =
       spark
         .read
         .format("delta")
         .load("../storage/curated/firetimetravel_gold.db/fact_fire/data")
-
-    /*
-    println(gold.count())
-    */
-
+   */
   }
 }
