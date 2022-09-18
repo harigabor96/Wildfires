@@ -30,7 +30,7 @@ The schema for the final persistence layer (Gold Zone) is my own creation and it
 My solution is to represent this duality in the Data Lakehouse:
 -	Closed records should be treated as Archives.
 -	Open records should be treated as Snapshots.
--	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as a Snapshot or an updateable Archive.
+-	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as a Snapshot or an updatable Archive.
 
 ### Aggregation and Integration
 The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star Schema, etc.) can be applied, tables can be joined, unioned, aggregated, etc.
@@ -39,6 +39,7 @@ The final element of the architecture is a powerful query engine (Photon) which 
 The scope of the project is nothing special as it only transforms and visualizes one source table containing historical geographical data of US Wildfires. 
 
 The source dataset can be found at:
+
 [https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires)
 
 ### Components
