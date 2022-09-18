@@ -34,6 +34,8 @@ case class Arch_Fire(spark: SparkSession) extends GenericPipeline {
     extractedDf
       .select(
         col("FOD_ID").as("FireID"),
+        col("DiscoveryDate"),
+        col("ContDate"),
         explode_outer(
           daysFromInterval(col("DiscoveryDate"), col("ContDate"))
         ).as("Date"),

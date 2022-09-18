@@ -29,7 +29,7 @@ object App {
 
     //bronze.wildfire.Fires(spark, appConfig.rawZonePath).execute()
     //datamarts.firetimetravel.silver.Fires(spark).execute()
-    //datamarts.firetimetravel.gold.Arch_Fire(spark).execute()
+    datamarts.firetimetravel.gold.Arch_Fire(spark).execute()
 
     //val bronzeDf = spark.read.format("delta").load("../storage/curated/bronze_wildfire.db/fires/data")
     //val silver = spark.read.format("delta").load("../storage/curated/dm_firetimetravel_silver.db/fires/data")
