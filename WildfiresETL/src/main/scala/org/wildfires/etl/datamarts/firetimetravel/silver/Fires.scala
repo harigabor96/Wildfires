@@ -29,8 +29,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
       .load(inputPath)
   }
 
-  override def transform(extractedData: Any): DataFrame = {
-    val extractedDf = extractedData.asInstanceOf[DataFrame]
+  override def transform(extractedDf: DataFrame): DataFrame = {
 
     extractedDf
       .filter(

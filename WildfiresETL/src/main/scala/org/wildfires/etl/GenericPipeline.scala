@@ -6,9 +6,9 @@ trait GenericPipeline {
 
   def execute(): Unit
 
-  def extract(): Any
+  def extract(): DataFrame
   
-  def transform(extractedData: Any): DataFrame
+  def transform(extractedDf: DataFrame): DataFrame
 
-  def load(transformedData: DataFrame): Unit
+  def load(transformedDf: DataFrame): Unit
 }
