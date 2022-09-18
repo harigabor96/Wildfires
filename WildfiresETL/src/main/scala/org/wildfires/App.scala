@@ -37,21 +37,23 @@ object App {
         .load("../storage/curated/bronze_wildfire.db/fires/data")
     */
 
-    /*
     val silver =
       spark
         .read
         .format("delta")
         .load("../storage/curated/firetimetravel_silver.db/fires/data")
 
-    silver.show() */
+    println(silver.count())
 
-    /*
     val gold =
       spark
         .read
         .format("delta")
         .load("../storage/curated/firetimetravel_gold.db/fact_fire/data")
+
+    /*
+    println(gold.count())
     */
+
   }
 }

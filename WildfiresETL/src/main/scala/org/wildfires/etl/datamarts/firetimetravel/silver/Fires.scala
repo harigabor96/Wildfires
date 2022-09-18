@@ -12,7 +12,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
 
   val inputPath = "../storage/curated/bronze_wildfire.db/fires/data"
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-  val outputDatabaseName ="firetimetravel_silver"
+  val outputDatabaseName ="dm_firetimetravel_silver"
   val outputTableName = "fires"
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"

@@ -1,16 +1,17 @@
 package org.wildfires.etl.datamarts.firetimetravel.gold
 
-import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.functions.{col, explode_outer}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
+import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
 import org.wildfires.service.DBService
 
 case class Fact_Fire(spark: SparkSession) extends GenericPipeline {
 
   val inputPath = "../storage/curated/firetimetravel_silver.db/fires/data"
   val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-  val outputDatabaseName ="firetimetravel_gold"
+  val outputDatabaseName ="dm_firetimetravel_gold"
   val outputTableName = "fact_fire"
   val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
@@ -30,12 +31,12 @@ case class Fact_Fire(spark: SparkSession) extends GenericPipeline {
   override def transform(extractedDf: DataFrame): DataFrame = {
     extractedDf
       .select(
-        col("FOD_ID"),
-        col("FIRE_YEAR"),
-        col("DiscoveryDate"),
-        col("ContDate"),
-        col("LATITUDE"),
-        col("LONGITUDE"),
+        col("FOD_ID").as("FireID"),
+        explode_outer(
+          daysFromInterval(col("DiscoveryDate"), col("ContDate"))
+        ).as("Date"),
+        col("LATITUDE").as("Latitude"),
+        col("LONGITUDE").as("Longitude"),
       )
   }
 
