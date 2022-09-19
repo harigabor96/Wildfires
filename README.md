@@ -49,8 +49,8 @@ The schema for the final persistence layer (Gold Zone) is my own creation and it
 -	An open record, that is subject to changes, which means it’s mutable.
 
 My solution is to represent this duality in the Data Lakehouse:
--	Closed records should be treated as Archives.
--	Open records should be treated as Snapshots.
+-	Closed records should be treated as Archives, that have unique natural/business PKs for the entire dataset.
+-	Open records should be treated as Snapshots, that have unique natural/business PKs for each snapshot.
 -	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as a Snapshot or an updatable Archive.
 
 ### Dynamic Aggregation and Integration
