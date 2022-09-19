@@ -2,6 +2,19 @@
 
 The purpose of this project is to show my skills in modern data engineering and data architecture with Apache Spark, Scala, and Azure Databricks, and to serve as a source of best practices for myself. The architecture described here is my own work and it tries to reconcile my first-hand experience with traditional data warehousing practices like Ralph Kimball’s and Bill Inmon’s works and with newly emerging practices, most notably Maxime Beauchemin’s Functional Data Engineering.
 
+## The Project
+The scope of this project is nothing special as its' main aim is to show quality, not quantity. The ETL pipelines transform one source table that contains historical geographical data of US Wildfires, which is then visualized by a Power BI report.
+
+The source dataset can be found at:
+[https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires)
+
+### Components
+ - The "WildfiresETL" Scala project applies all the below rules to the ETL process as well as a clean project structure and consistent naming conventions. 
+ - The storage folder contains the "sample" version of Data Lakehouse with a raw zone containing .csv files in a folder structure and a curated zone containing the usual delta tables.
+ - The .pbix report contains a very simple report to visualize the output data. This report is without errors but isn't optimized according to BI best practices, as I don't have a way to simulate Databricks SQL.
+ 
+![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/FireTimeTravel.PNG?raw=true)
+
 ## The Architecture
 This design pattern is expected to be general-purpose which means that:
 - It should support any type of analysis (BI, ML, AI, Ad-Hoc, etc.).
@@ -43,19 +56,6 @@ My solution is to represent this duality in the Data Lakehouse:
 
 ### Dynamic Aggregation and Integration
 The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star Schema, etc.) can be applied, tables can be joined, unioned, aggregated, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL.
-
-## The Project
-The scope of the project is nothing special as it only transforms and visualizes one source table containing historical geographical data of US Wildfires. 
-
-The source dataset can be found at:
-[https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires)
-
-### Components
- - The "WildfiresETL" Scala project applies all the above rules to the ETL process as well as a clean project structure and consistent naming conventions. 
- - The storage folder contains the "sample" version of Data Lakehouse with a raw zone containing .csv files in a folder structure and a curated zone containing the usual delta tables.
- - The .pbix report contains a very simple report to visualize the output data. This report is without errors but isn't optimized according to BI best practices, as I don't have a way to simulate Databricks SQL.
- 
-![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/FireTimeTravel.PNG?raw=true)
 
 ### WIP/Backlog
  - Pipeline selection with command line parameter
