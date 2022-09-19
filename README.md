@@ -35,7 +35,7 @@ When designing the DAG of a Data Mart it's also worth to keep in mind that there
 As a result of these constraints, ETL pipelines can be restricted by an interface to have a single input and a single output.
 ### Partition Pruning
 One of the issues of traditional architectures was that some operations that are necessary from a business point of view (deduplication, row updates) involve reading the whole historic dataset in the Data Warehouse. In a partitioned dataset, this can be mitigated by choosing the partitions carefully and making sure that partition pruning is in effect when possible.
-### Snapshot/Archive Schema
+### Snapshots and Archives
 The schema for the final persistence layer (Gold Zone) is my own creation and it draws from OLTP database design (specifically the posting mechanism of ERP systems) and functional programming. My key observation here was that data present in the source is either:
 - A closed record, that is never changed again, which means it’s immutable.
 -	An open record, that is subject to changes, which means it’s mutable.
