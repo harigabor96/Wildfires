@@ -45,7 +45,7 @@ The schema for the final persistence layer (Gold Zone) is my own creation and it
 My solution is to represent this duality in the Data Lakehouse:
 -	Closed records should be treated as Archives, that have unique natural/business PKs for the entire dataset.
 -	Open records should be treated as Snapshots, that have unique natural/business PKs within each snapshot.
--	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as a Snapshots or an updatable Archive.
+-	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive.
 ### Dynamic Aggregation and Integration
 The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star Schema, etc.) can be applied, tables can be joined, unioned, aggregated, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL.
 ### WIP/Backlog
