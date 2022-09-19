@@ -31,7 +31,7 @@ The independent data mart approach was labeled as an anti-pattern both by Inmon 
 ### Minimized Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data and aggregation/windowing. Of course, this means query time aggregations, which only work when a powerful query engine like Photon (Databricks SQL) is present as the final layer of the architecture.
 
-### Non-duplicating Isolation
+### Non-Duplicating Isolation
 Just like aggregation, horizontal (join/merge) integration breaks when late arriving data is present as joining two tables via a pipeline would require the relevant batches of each pipeline to be available at the exact same time. Vertical integration (union/append) can be performed, however, it's not ideal as it would require two tables from separate sources to have the same schema. On top of this, the need might arise to separate the two tables in query time, which would mean filtering, which is more costly as an operation than union.
 
 These problems can be easily solved by keeping the DAG of each Data Mart as a "Forest" where Bronze tables are the trunks and Gold tables are the topmost branches. This approach is beneficial as the isolated Gold Tables provide maximum flexibility and performance for query time aggregation and integration, and also minimize storage and schema complexity.
