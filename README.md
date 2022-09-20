@@ -28,7 +28,7 @@ The main idea behind this architecture originates from Inmon, in a way that data
 ### Schema Separation
 Just like aggregation, horizontal (join/merge) integration breaks when late arriving data is present as joining two tables via a pipeline would require the relevant batches of each data source to be available at the exact same time. Vertical integration (union/append) can be performed, however, it's not ideal as it would require two tables from separate sources to have the same schema. On top of this, the need might arise to separate the two tables in query time, which would mean filtering, which is more costly as an operation than union.
 
-These problems can be easily solved by keeping the DAG of each Data Mart as a "Forest" where Bronze tables are the trunks and Gold tables are the topmost branches. When the separation (filtering, explode) of tables with multiple granularities and/or multiple business event/entity types into individual tables is added on top of this, the Gold Zone will provide maximum flexibility and performance for query time aggregation and integration, and also minimize storage and schema complexity.
+These problems can be easily solved by keeping the DAG of each Data Mart as a "Forest" where Bronze tables are the trunks and Gold tables are the topmost branches. When the separation (filtering) of tables with multiple business event/entity types into individual tables is added on top of this, the Gold Zone will provide maximum flexibility and performance for query time aggregation and integration, and also minimize storage and schema complexity.
 
 As a result of these constraints, ETL pipelines can be restricted by an interface to have a single input and a single output.
 ### Partition Pruning
