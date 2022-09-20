@@ -8,7 +8,7 @@ The source dataset can be found at:
 ### Components
  - The "WildfiresETL" Scala project applies all the rules described in "The Architecture" section to the ETL process as well as a clean project structure and consistent naming conventions. 
  - The storage folder contains the "sample" version of a Data Lakehouse with the raw zone containing .csv files in a folder structure and the curated zone containing the usual delta tables.
- - The .pbix report contains a very simple report to visualize the output data. This report is without errors but isn't optimized according to BI best practices, as I don't have a way to simulate Databricks SQL.
+ - The .pbix file contains a very simple report that visualizes the output data.
  
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/FireTimeTravel.PNG?raw=true)
 ## The Architecture
