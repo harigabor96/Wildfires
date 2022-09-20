@@ -30,8 +30,6 @@ Just like aggregation, horizontal (join/merge) integration breaks when late arri
 
 These problems can be easily solved by keeping the DAG of each Data Mart as a "Forest" where Bronze tables are the trunks and Gold tables are the topmost branches. When the separation (filtering) of tables with multiple business event/entity types into individual tables is added on top of this, the Gold Zone will provide maximum flexibility and performance for query time aggregation and integration, and also minimize storage and schema complexity.
 
-When designing the DAG of a Data Mart it's also worth to keep in mind that there is the possibility to create late arriving duplicate data with ETL pipelines. This happens when a record in a certain zone is processed by multiple pipelines and is output to multiple tables in the next zone. This is also easy to solve, by keeping the table-level DAG of each individual row as a straight line. This means that a certain filter should only be present once per "pipeline zone" per Data Mart.
-
 As a result of these constraints, ETL pipelines can be restricted by an interface to have a single input and a single output.
 ### Partition Pruning
 One of the issues of traditional architectures was that some operations that are necessary from a business point of view (deduplication, row updates) involve reading the whole historic dataset in the Data Warehouse. In a partitioned dataset, this can be mitigated by choosing the partitions carefully and making sure that partition pruning is in effect when possible.
