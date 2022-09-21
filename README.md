@@ -31,8 +31,6 @@ Just like aggregation, horizontal (join/merge) integration breaks when late arri
 These problems can be easily solved by keeping the DAG of each Data Mart as a "Forest" where Bronze tables are the trunks and Gold tables are the topmost branches. When the separation (filtering) of tables with multiple business event/entity types into individual tables is added on top of this, the Gold Zone will provide maximum flexibility and performance for query time aggregation and integration, and also minimize storage and schema complexity.
 ### Partition Pruning
 One of the issues of traditional architectures was that some operations that are necessary from a business point of view (deduplication, row updates) involve reading the whole historic dataset in the Data Warehouse. In a partitioned dataset, this can be mitigated by choosing the partitions carefully and making sure that partition pruning is in effect when possible.
-
-A side note to this is that Spark 3.3.0 introduced the AvailableNow() trigger which can completely replace spark.read batch pipelines, which means that partitioning on Event Date is enough in the Silver Zone as checkpointing will take care of reading the data in the Silver to Gold pipelines.
 ### Snapshots and Archives
 The schema for the final persistence layer (Gold Zone) is my own creation and it draws from OLTP database design (specifically the posting mechanism of ERP systems) and functional programming. My key observation here was that data present in the source is either:
 - A closed record, that is never changed again, which means it’s immutable.
