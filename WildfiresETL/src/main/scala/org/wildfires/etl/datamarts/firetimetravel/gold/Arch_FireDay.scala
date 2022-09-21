@@ -30,13 +30,16 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
 
   override def transform(extractedDf: DataFrame): DataFrame = {
     extractedDf
+      .withColumn("Date",
+        explode_outer(
+          daysFromInterval(col("DiscoveryDate"), col("ContDate"))
+        )
+      )
       .select(
         col("FOD_ID").as("FireID"),
         col("DiscoveryDate"),
         col("ContDate"),
-        explode_outer(
-          daysFromInterval(col("DiscoveryDate"), col("ContDate"))
-        ).as("Date"),
+        col("Date").cast("date").as("Date"),
         col("LATITUDE").as("Latitude"),
         col("LONGITUDE").as("Longitude"),
       )

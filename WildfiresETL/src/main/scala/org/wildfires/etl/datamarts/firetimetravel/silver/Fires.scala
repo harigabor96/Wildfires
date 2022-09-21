@@ -52,11 +52,10 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
         )
       )
       .groupBy(
-        col("FIRE_YEAR"),
-        col("DiscoveryDate"),
-        col("ContDate"),
-        col("LATITUDE"),
-        col("LONGITUDE")
+        col("DiscoveryDate").cast("date").as("DiscoveryDate"),
+        col("ContDate").cast("date").as("ContDate"),
+        col("LATITUDE").cast("double").as("LATITUDE"),
+        col("LONGITUDE").cast("double").as("LONGITUDE")
       )
       .agg(
         first(col("FOD_ID")).as("FOD_ID")
@@ -89,7 +88,7 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
 
         val batchEventDates =
           transformedBatch
-            .select(col("DiscoveryDate"))
+            .select(col("DiscoveryDate").cast("string"))
             .dropDuplicates()
             .map(_.getString(0))
             .collect()
@@ -104,7 +103,6 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
                 deltaTable.DiscoveryDate IN ('$batchEventDates')
                 AND
                 (
-                  deltaTable.FIRE_YEAR <=> updates.FIRE_YEAR AND
                   deltaTable.DiscoveryDate <=> updates.DiscoveryDate AND
                   deltaTable.ContDate <=> updates.ContDate AND
                   deltaTable.LATITUDE <=> updates.LATITUDE AND

@@ -45,5 +45,4 @@ The final element of the architecture is a powerful query engine (Photon) which 
 ### WIP/Backlog
  - Pipeline selection with command line parameter
  - Unit Tests
- - Proper column types
  - General code formatting

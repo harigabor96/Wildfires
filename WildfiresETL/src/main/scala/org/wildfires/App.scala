@@ -29,10 +29,10 @@ object App {
 
     //bronze.wildfire.Fires(spark, appConfig.rawZonePath, appConfig.curatedZonePath).execute()
     //datamarts.firetimetravel.silver.Fires(spark, appConfig.curatedZonePath).execute()
-    datamarts.firetimetravel.gold.Arch_FireDay(spark, appConfig.curatedZonePath).execute()
+    //datamarts.firetimetravel.gold.Arch_FireDay(spark, appConfig.curatedZonePath).execute()
 
     //val bronzeDf = spark.read.format("delta").load("../storage/curated/bronze_wildfire.db/fires/data")
     //val silver = spark.read.format("delta").load("../storage/curated/dm_firetimetravel_silver.db/fires/data")
-    //val gold = spark.read.format("delta").load("../storage/curated/dm_firetimetravel_gold.db/arch_fire/data")
+    //val gold = spark.read.format("delta").load("../storage/curated/dm_firetimetravel_gold.db/arch_fireday/data")
   }
 }
