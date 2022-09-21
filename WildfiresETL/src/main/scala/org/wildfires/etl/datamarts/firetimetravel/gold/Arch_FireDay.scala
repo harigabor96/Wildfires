@@ -57,8 +57,8 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
       .option("checkpointLocation", outputTableCheckpointPath)
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
-/*
+
     DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName) */
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }

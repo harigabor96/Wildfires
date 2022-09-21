@@ -91,8 +91,8 @@ case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: Stri
       .option("checkpointLocation", outputTableCheckpointPath)
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
-/*
+
     DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName) */
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }

@@ -116,8 +116,8 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
       }
       .start()
       .awaitTermination()
-/*
+
     DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName) */
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
 }
