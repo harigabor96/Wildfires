@@ -9,15 +9,13 @@ import org.apache.spark.sql.types._
 import org.wildfires.util.DBUtils
 import org.wildfires.etl.bronze.wildfire.util.Functions._
 
-case class Fires(spark: SparkSession, rawZonePath: String) extends GenericPipeline {
+case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: String) extends GenericPipeline {
 
   val inputPath = s"$rawZonePath/FPA_FOD_20170508/{*}/in"
 
-  val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-
   val outputDatabaseName = "bronze_wildfire"
   val outputTableName = "fires"
-  val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
+  val outputTablePath = s"$curatedZonePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
   val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
 
@@ -89,12 +87,12 @@ case class Fires(spark: SparkSession, rawZonePath: String) extends GenericPipeli
       .outputMode("append")
       .partitionBy("ExtractionDate")
       .format("delta")
-      .option("path", outputTableDataPath)
+      .option("path", s"../$outputTableDataPath")
       .option("checkpointLocation", outputTableCheckpointPath)
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
-
+/*
     DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName) */
   }
 }

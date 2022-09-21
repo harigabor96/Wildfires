@@ -8,15 +8,13 @@ import org.wildfires.etl.{GenericPipeline}
 import org.wildfires.util._
 import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
 
-case class Fires (spark: SparkSession) extends GenericPipeline {
+case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericPipeline {
 
-  val warehousePath = spark.conf.get("spark.sql.warehouse.dir")
-
-  val inputPath = s"$warehousePath/bronze_wildfire.db/fires/data"
+  val inputPath = s"$curatedZonePath/bronze_wildfire.db/fires/data"
 
   val outputDatabaseName = "dm_firetimetravel_silver"
   val outputTableName = "fires"
-  val outputTablePath = s"$warehousePath/$outputDatabaseName.db/$outputTableName"
+  val outputTablePath = s"$curatedZonePath/$outputDatabaseName.db/$outputTableName"
   val outputTableDataPath = s"$outputTablePath/data"
   val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
 
@@ -84,7 +82,7 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
             .save(s"$outputTableDataPath")
 
           DBUtils.createDatabaseIfNotExist(spark, outputDatabaseName)
-          DBUtils.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, outputTableDataPath)
+          DBUtils.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, s"../$outputTableDataPath")
         }
 
         import spark.implicits._
@@ -120,8 +118,8 @@ case class Fires (spark: SparkSession) extends GenericPipeline {
       }
       .start()
       .awaitTermination()
-
+/*
     DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
+    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName) */
   }
 }
