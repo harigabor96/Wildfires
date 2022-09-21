@@ -1,3 +1,3 @@
 package org.wildfires.util
 
-case class AppConfig(rawZonePath: String, curatedZonePath: String, pipeline: String)
+case class AppConfig(master: String, rawZonePath: String, curatedZonePath: String, pipeline: String)

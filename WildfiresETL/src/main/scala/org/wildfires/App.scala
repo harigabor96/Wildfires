@@ -8,6 +8,7 @@ object App {
   def main(args: Array[String]): Unit = {
 
     val appConfig = AppConfig(
+      "local",
       "../storage/raw",
       "../storage/curated",
       "bronze.wildfire.fires"
@@ -19,7 +20,7 @@ object App {
       .builder()
       .appName("Wildfires")
       .config("spark.sql.warehouse.dir", appConfig.curatedZonePath)
-      .master("local")
+      .master(appConfig.master)
       .getOrCreate()
 
     spark.sparkContext.setLogLevel("ERROR")
