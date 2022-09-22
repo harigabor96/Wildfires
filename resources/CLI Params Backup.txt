@@ -1,8 +1,0 @@
-"local",
-"../storage/raw",
-"../storage/curated",
-"bronze.wildfire.fires" *
-"datamarts.firetimetravel.silver.fires"
-"datamarts.firetimetravel.gold.fires"
-
-java -jar Wildfires-1.0-jar-with-dependencies.jar -m "local" -r "C:\Users\harig\Desktop\Lake\raw" -c "C:\Users\harig\Desktop\Lake\curated" -p "bronze.wildfire.fires"
