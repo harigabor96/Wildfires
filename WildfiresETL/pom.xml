@@ -5,7 +5,7 @@
   <version>1.0</version>
   <inceptionYear>2008</inceptionYear>
   <properties>
-    <scala.version>2.13.5</scala.version>
+    <scala.version>2.13.8</scala.version>
     <spark.version>3.3.0</spark.version>
   </properties>
 
@@ -73,6 +73,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
+              <addClasspath>true</addClasspath>
               <mainClass>org.wildfires.App</mainClass>
             </manifest>
           </archive>

@@ -6,14 +6,6 @@ import org.wildfires.etl.PipelineRunner
 object App {
   def main(args: Array[String]): Unit = {
     val conf = new Conf(args)
-    /*
-     "local",
-     "../storage/raw",
-     "../storage/curated",
-     "bronze.wildfire.fires" *
-     "datamarts.firetimetravel.silver.fires"
-     "datamarts.firetimetravel.gold.fires"
-    */
 
     val spark = SparkSession
       .builder()
