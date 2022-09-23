@@ -13,9 +13,8 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
 
   val outputDatabaseName = "dm_firetimetravel_gold"
   val outputTableName = "arch_fireday"
-  val outputTablePath = s"$curatedZonePath/$outputDatabaseName.db/$outputTableName"
-  val outputTableDataPath = s"$outputTablePath/data"
-  val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
+  val outputDataRelativePath = s"$outputDatabaseName.db/$outputTableName/data"
+  val outputCheckpointRelativePath = s"$outputDatabaseName.db/$outputTableName/checkpoint"
 
   override def execute(): Unit = {
     load(transform(extract()))
@@ -53,8 +52,8 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
       .trigger(Trigger.AvailableNow())
       .outputMode("append")
       .format("delta")
-      .option("path", s"../$outputTableDataPath")
-      .option("checkpointLocation", outputTableCheckpointPath)
+      .option("path", s"$outputDataRelativePath")
+      .option("checkpointLocation", s"$curatedZonePath/$outputCheckpointRelativePath")
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
 

@@ -15,9 +15,8 @@ case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: Stri
 
   val outputDatabaseName = "bronze_wildfire"
   val outputTableName = "fires"
-  val outputTablePath = s"$curatedZonePath/$outputDatabaseName.db/$outputTableName"
-  val outputTableDataPath = s"$outputTablePath/data"
-  val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
+  val outputDataRelativePath = s"$outputDatabaseName.db/$outputTableName/data"
+  val outputCheckpointRelativePath = s"$outputDatabaseName.db/$outputTableName/checkpoint"
 
   val inputSchema = new StructType()
     .add("OBJECTID", StringType)
@@ -87,8 +86,8 @@ case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: Stri
       .outputMode("append")
       .partitionBy("ExtractionDate")
       .format("delta")
-      .option("path", s"../$outputTableDataPath")
-      .option("checkpointLocation", outputTableCheckpointPath)
+      .option("path", s"$outputDataRelativePath")
+      .option("checkpointLocation", s"$curatedZonePath/$outputCheckpointRelativePath")
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
 

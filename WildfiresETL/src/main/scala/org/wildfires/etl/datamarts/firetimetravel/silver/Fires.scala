@@ -14,9 +14,8 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
 
   val outputDatabaseName = "dm_firetimetravel_silver"
   val outputTableName = "fires"
-  val outputTablePath = s"$curatedZonePath/$outputDatabaseName.db/$outputTableName"
-  val outputTableDataPath = s"$outputTablePath/data"
-  val outputTableCheckpointPath = s"$outputTablePath/checkpoint"
+  val outputDataRelativePath = s"$outputDatabaseName.db/$outputTableName/data"
+  val outputCheckpointRelativePath = s"$outputDatabaseName.db/$outputTableName/checkpoint"
 
   override def execute(): Unit = {
     load(extract())
@@ -67,7 +66,7 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
     transformedDf
       .writeStream
       .trigger(Trigger.AvailableNow())
-      .option("checkpointLocation", outputTableCheckpointPath)
+      .option("checkpointLocation", s"$curatedZonePath/$outputCheckpointRelativePath")
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
 
         val transformedBatch = transform(batchDF)
@@ -78,10 +77,10 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
             .partitionBy("DiscoveryDate")
             .format("delta")
             .mode("overwrite")
-            .save(s"$outputTableDataPath")
+            .save(s"$curatedZonePath/$outputDataRelativePath")
 
           DBUtils.createDatabaseIfNotExist(spark, outputDatabaseName)
-          DBUtils.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, s"../$outputTableDataPath")
+          DBUtils.createDeltaTableFromPath(spark, outputDatabaseName, outputTableName, s"$curatedZonePath/$outputDataRelativePath")
         }
 
         import spark.implicits._
