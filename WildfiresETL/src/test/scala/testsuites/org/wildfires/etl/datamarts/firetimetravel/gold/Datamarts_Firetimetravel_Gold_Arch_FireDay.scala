@@ -10,7 +10,7 @@ class Datamarts_Firetimetravel_Gold_Arch_FireDay extends FunSuite with SharedSpa
   val goldSourcePath = "../storage/curated/dm_firetimetravel_gold.db/arch_fireday/data"
 
   //Filter Criteria Silver Integration Tests
-    //Not needed in the current use case
+    //Not needed for the current use case
 
   //Explode Silver Integration Tests
   test("Data Cleansing - ContDate") {

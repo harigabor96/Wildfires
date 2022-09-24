@@ -32,5 +32,5 @@ class Datamarts_Firetimetravel_Silver_Fires extends FunSuite with SharedSparkSes
   }
 
   //Filter Criteria Tests
-    //Not needed in the current use case
+    //Not needed for the current use case
 }

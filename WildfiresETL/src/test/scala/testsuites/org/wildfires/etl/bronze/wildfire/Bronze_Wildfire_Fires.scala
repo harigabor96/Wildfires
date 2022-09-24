@@ -8,7 +8,7 @@ class Bronze_Wildfire_Fires extends FunSuite with SharedSparkSession {
   val sourcePath = "../storage/curated/bronze_wildfire.db/fires/data"
 
   //Schema Validation & Evolution Tests
-    //Not needed in the current use case
+    //Not needed for the current use case
 
   //Ingestion Tests
   test("Ingested Row Count") {
