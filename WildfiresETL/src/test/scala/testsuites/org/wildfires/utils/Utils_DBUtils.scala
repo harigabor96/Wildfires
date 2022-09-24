@@ -1,6 +1,5 @@
 package testsuites.org.wildfires.utils
 
-import org.apache.spark.sql.DataFrame
 import testutils._
 import org.scalatest._
 import org.wildfires.utils.DBUtils._

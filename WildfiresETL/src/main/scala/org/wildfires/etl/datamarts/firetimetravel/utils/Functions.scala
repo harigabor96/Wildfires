@@ -10,7 +10,11 @@ import scala.collection.mutable.ListBuffer
 
 object Functions {
 
-  def _getDate(year: Int , doy: Int): String = {
+  def _getDate(year: Integer, doy: Integer): String = {
+    if (year == null) throw new Exception("Year cannot be null!")
+    if (doy == null) throw new Exception("Day of the Year cannot be null!")
+    if (doy < 1 || 366 < doy ) throw new Exception("Day of the Year out of range!")
+
     Year.of(year)
       .atDay(doy)
       .toString
