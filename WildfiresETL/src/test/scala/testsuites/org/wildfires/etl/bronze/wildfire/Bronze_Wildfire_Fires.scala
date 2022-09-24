@@ -3,7 +3,7 @@ package testsuites.org.wildfires.etl.bronze.wildfire
 import testutils._
 import org.scalatest._
 
-class FiresSuite extends FunSuite with SharedSparkSession {
+class Bronze_Wildfire_Fires extends FunSuite with SharedSparkSession {
   
   val sourcePath = "../storage/curated/bronze_wildfire.db/fires/data"
 
