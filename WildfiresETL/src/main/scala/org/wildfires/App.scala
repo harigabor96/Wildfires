@@ -12,7 +12,7 @@ object App {
       "-r", "../storage/raw/",
       "-c", "../storage/curated/",
       //"-p", "bronze.wildfire.fires"
-      "-p", "datamarts.firetimetravel.silver.fires"
+      //"-p", "datamarts.firetimetravel.silver.fires"
       //"-p", "datamarts.firetimetravel.gold.fires"
     ))
 
