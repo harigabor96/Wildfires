@@ -11,7 +11,7 @@ object DBUtils {
     """)
   }
 
-  def createDeltaTableFromPath(spark: SparkSession, databaseName: String, tableName: String, deltaLocation: String) = {
+  def createTableFromPath(spark: SparkSession, databaseName: String, tableName: String, deltaLocation: String) = {
     spark.sql(s"""
             CREATE TABLE $databaseName.$tableName
             USING DELTA
