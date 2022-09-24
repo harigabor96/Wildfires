@@ -1,4 +1,4 @@
-package org.wildfires.util
+package org.wildfires.utils
 
 import io.delta.tables.DeltaTable
 import org.apache.spark.sql.SparkSession

@@ -6,8 +6,8 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.types._
-import org.wildfires.util.DBUtils
-import org.wildfires.etl.bronze.wildfire.util.Functions._
+import org.wildfires.utils.DBUtils
+import org.wildfires.etl.bronze.wildfire.utils.Functions._
 
 case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: String) extends GenericPipeline {
 

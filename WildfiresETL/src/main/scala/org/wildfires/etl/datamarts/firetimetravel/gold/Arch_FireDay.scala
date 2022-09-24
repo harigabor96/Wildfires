@@ -4,8 +4,8 @@ import org.apache.spark.sql.functions.{col, explode_outer}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
-import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
-import org.wildfires.util.DBUtils
+import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
+import org.wildfires.utils.DBUtils
 
 case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends GenericPipeline {
 

@@ -5,8 +5,8 @@ import org.apache.spark.sql.functions.{first, _}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.{GenericPipeline}
-import org.wildfires.util._
-import org.wildfires.etl.datamarts.firetimetravel.util.Functions._
+import org.wildfires.utils._
+import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
 
 case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericPipeline {
 
