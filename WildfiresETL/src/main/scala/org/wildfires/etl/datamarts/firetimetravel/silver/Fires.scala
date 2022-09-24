@@ -80,7 +80,7 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
             .save(s"$curatedZonePath/$outputDataRelativePath")
 
           DBUtils.createDatabaseIfNotExist(spark, outputDatabaseName)
-          DBUtils.createTableFromPath(spark, outputDatabaseName, outputTableName, s"$curatedZonePath/$outputDataRelativePath")
+          DBUtils.createTableFromPath(spark, outputDatabaseName, outputTableName, s"$outputDataRelativePath")
         }
 
         import spark.implicits._

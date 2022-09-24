@@ -11,8 +11,8 @@ object App {
       "-m", "local",
       "-r", "../storage/raw/",
       "-c", "../storage/curated/",
-      "-p", "bronze.wildfire.fires"
-      //"-p", "datamarts.firetimetravel.silver.fires"
+      //"-p", "bronze.wildfire.fires"
+      "-p", "datamarts.firetimetravel.silver.fires"
       //"-p", "datamarts.firetimetravel.gold.fires"
     ))
 
