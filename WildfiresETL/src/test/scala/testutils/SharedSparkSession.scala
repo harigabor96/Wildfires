@@ -1,4 +1,4 @@
-package testUtil
+package testutils
 
 import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterAll, Suite}
