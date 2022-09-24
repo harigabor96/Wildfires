@@ -5,17 +5,16 @@ import org.wildfires.etl.PipelineRunner
 
 object App {
   def main(args: Array[String]): Unit = {
-    val conf = new Conf(args)
+    //val conf = new Conf(args)
 
-    /*
     val conf = new Conf(Array(
       "-m", "local",
       "-r", "C:/Users/harig/Desktop/Wildfires-1/storage/raw/",
       "-c", "C:/Users/harig/Desktop/Wildfires-1/storage/curated/",
-      //"-p", "bronze.wildfire.fires"
+      "-p", "bronze.wildfire.fires"
       //"-p", "datamarts.firetimetravel.silver.fires"
       //"-p", "datamarts.firetimetravel.gold.fires"
-    )) */
+    ))
 
     val spark = SparkSession
       .builder()

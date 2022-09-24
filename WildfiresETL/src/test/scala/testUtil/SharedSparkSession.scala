@@ -16,6 +16,9 @@ trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
         .appName("Wildfires")
         .master("local")
         .getOrCreate()
+
+    spark.sparkContext.setLogLevel("ERROR")
+
     super.beforeAll()
   }
 
