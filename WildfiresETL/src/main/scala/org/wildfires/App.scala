@@ -9,8 +9,8 @@ object App {
 
     val conf = new Conf(Array(
       "-m", "local",
-      "-r", "C:/Users/harig/Desktop/Wildfires-1/storage/raw/",
-      "-c", "C:/Users/harig/Desktop/Wildfires-1/storage/curated/",
+      "-r", "../storage/raw/",
+      "-c", "../storage/curated/",
       "-p", "bronze.wildfire.fires"
       //"-p", "datamarts.firetimetravel.silver.fires"
       //"-p", "datamarts.firetimetravel.gold.fires"

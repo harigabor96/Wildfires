@@ -5,7 +5,7 @@ import org.scalatest._
 
 class FiresSuite extends FunSuite with SharedSparkSession {
   
-  val sourcePath = "C:/Users/harig/Desktop/Wildfires-1/storage/curated/bronze_wildfire.db/fires/data"
+  val sourcePath = "../storage/curated/bronze_wildfire.db/fires/data"
   
   test("Ingested Row Count") {
     val fires = spark.read.format("delta").load(sourcePath)
