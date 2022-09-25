@@ -1,19 +1,16 @@
 package testutils
 
 import org.apache.spark.sql.SparkSession
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import org.scalatest.{BeforeAndAfterEach, Suite}
 
-trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
-
-  @transient protected var _spark: SparkSession = _
-
-  def spark: SparkSession = _spark
+trait WarehouseTest extends SharedSparkSession with BeforeAndAfterEach { self: Suite =>
 
   override def beforeAll(): Unit = {
     _spark =
       SparkSession
         .builder()
         .appName("Wildfires")
+        .config("spark.sql.warehouse.dir", "")
         .master("local")
         .getOrCreate()
 
@@ -22,9 +19,7 @@ trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
     super.beforeAll()
   }
 
-  override def afterAll(): Unit = {
-    _spark.stop()
-    _spark = null
-    super.afterAll()
-  }
+  override def beforeEach(): Unit = super.beforeEach()
+
+  override def afterEach(): Unit = super.beforeEach()
 }
