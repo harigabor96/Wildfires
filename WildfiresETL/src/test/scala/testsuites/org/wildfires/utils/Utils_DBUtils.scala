@@ -4,7 +4,7 @@ import testutils._
 import org.scalatest._
 import org.wildfires.utils.DBUtils._
 
-class Utils_DBUtils extends FunSuite with SharedSparkSession {
+class Utils_DBUtils extends FunSuite with WarehouseTest {
 
   test("createDatabaseIfNotExist()") {
     assertThrows[Exception](createDatabaseIfNotExist(spark,null))
