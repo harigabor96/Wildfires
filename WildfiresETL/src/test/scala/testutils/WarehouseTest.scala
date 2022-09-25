@@ -1,24 +1,23 @@
 package testutils
 
-import org.apache.commons.io.FileUtils.deleteDirectory
 import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterEach, Suite}
 
 import java.io.File
 
-trait WarehouseTest extends SharedSparkSession with BeforeAndAfterEach { self: Suite =>
+trait WarehouseTest extends BeforeAndAfterEach with SharedSparkSession { self: Suite =>
 
-  val testWarehousePath = "./test/resources/Test-Warehouse"
+  val testWarehousePath = "./src/test/resources/Test-Warehouse"
   val testDatabaseName = "commontest"
   val testTableName = "test"
-  val outputDataRelativePath = s"$testDatabaseName.db/$testTableName/data"
+  val testDataRelativePath = s"$testDatabaseName.db/$testTableName/data"
 
   private def deleteDirRecursive(path: String): Unit = {
     val dir = new File(path)
     val allContents = dir.listFiles()
     if (allContents != null) {
       for (file <- allContents) {
-        deleteDirectory(file)
+        deleteDirRecursive(file.toPath.toString)
       }
     }
     dir.delete()
@@ -34,14 +33,10 @@ trait WarehouseTest extends SharedSparkSession with BeforeAndAfterEach { self: S
         .getOrCreate()
 
     spark.sparkContext.setLogLevel("ERROR")
-
-    super.beforeAll()
   }
 
   override def afterAll(): Unit = {
     deleteDirRecursive(testWarehousePath)
-    _spark.stop()
-    _spark = null
     super.afterAll()
   }
 
@@ -52,16 +47,26 @@ trait WarehouseTest extends SharedSparkSession with BeforeAndAfterEach { self: S
     Seq("1")
       .toDF()
       .write
-      .partitionBy("DiscoveryDate")
       .format("delta")
       .mode("overwrite")
-      .save(s"$testWarehousePath/$outputDataRelativePath")
+      .save(s"$testWarehousePath/$testDataRelativePath")
 
-    super.beforeEach()
+    spark.sql(s"""
+      CREATE DATABASE IF NOT EXISTS $testDatabaseName
+    """)
+
+    spark.sql(s"""
+            CREATE TABLE $testDatabaseName.$testTableName
+            USING DELTA
+            LOCATION '$testDataRelativePath'
+    """)
   }
 
   override def afterEach(): Unit = {
-    deleteDirRecursive(s"$testWarehousePath/$outputDataRelativePath")
-    super.beforeEach()
+    deleteDirRecursive(s"$testWarehousePath")
+
+    spark.sql(s"""
+      DROP DATABASE $testDatabaseName CASCADE
+    """)
   }
 }
