@@ -26,7 +26,7 @@ The independent data mart approach was labeled as an anti-pattern both by Inmon 
 ### Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
 
-Inmon also allowed persisting aggregations as long as the lowest grain data is also persisted, however considering the nature of streaming and how common late arriving data is, it is only viable when the said aggregations are the result of commutative operations, like addition.
+Inmon also allowed persisting aggregations as long as the lowest grain data is also persisted, however considering the nature of streaming and how common late arriving data is, it is only viable when the said aggregations are the result of commutative operations like addition.
 ### Schema Separation
 Just like aggregation, horizontal (join/merge) integration breaks when late arriving data is present as joining two tables via a pipeline would require the relevant batches of each data source to be available at the exact same time. Vertical integration (union/append) can be performed, however, it's not ideal as it would require two tables from separate sources to have the same schema. On top of this, the need might arise to separate the two tables in query time, which would mean filtering, which is more costly as an operation than union.
 
