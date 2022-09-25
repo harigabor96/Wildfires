@@ -1,7 +1,7 @@
 package org.wildfires.utils
 
-import io.delta.tables.DeltaTable
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import io.delta.tables.DeltaTable
 
 object DBUtils {
 
@@ -74,4 +74,5 @@ object DBUtils {
 
     DeltaTable.forName(spark,s"$databaseName.$tableName").vacuum()
   }
+
 }

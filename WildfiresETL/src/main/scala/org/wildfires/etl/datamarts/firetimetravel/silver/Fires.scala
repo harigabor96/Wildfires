@@ -1,12 +1,12 @@
 package org.wildfires.etl.datamarts.firetimetravel.silver
 
-import io.delta.tables.DeltaTable
-import org.apache.spark.sql.functions.{first, _}
-import org.apache.spark.sql.streaming.Trigger
-import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
-import org.wildfires.utils._
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.streaming.Trigger
+import org.apache.spark.sql.functions._
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
+import org.wildfires.utils.DBUtils
+import io.delta.tables.DeltaTable
 
 case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericPipeline {
 
@@ -119,4 +119,5 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
     DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
+
 }

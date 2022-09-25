@@ -11,4 +11,5 @@ trait GenericPipeline {
   def transform(extractedDf: DataFrame): DataFrame
 
   def load(transformedDf: DataFrame): Unit
+
 }

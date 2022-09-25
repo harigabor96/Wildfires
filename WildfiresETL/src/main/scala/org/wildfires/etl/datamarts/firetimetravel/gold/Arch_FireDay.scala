@@ -1,9 +1,9 @@
 package org.wildfires.etl.datamarts.firetimetravel.gold
 
-import org.apache.spark.sql.functions.{col, explode_outer}
-import org.apache.spark.sql.streaming.Trigger
-import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.wildfires.etl.GenericPipeline
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.streaming.Trigger
+import org.apache.spark.sql.functions._
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
 import org.wildfires.utils.DBUtils
 
@@ -60,4 +60,5 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
     DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
     DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
   }
+
 }

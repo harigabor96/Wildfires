@@ -1,5 +1,3 @@
 package org.wildfires.etl.datamarts.firetimetravel.utils
 
-object Params {
-
-}
+object Params { }

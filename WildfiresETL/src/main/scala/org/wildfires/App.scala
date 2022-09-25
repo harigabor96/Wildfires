@@ -4,9 +4,11 @@ import org.apache.spark.sql.SparkSession
 import org.wildfires.etl.PipelineRunner
 
 object App {
-  def main(args: Array[String]): Unit = {
-    //val conf = new Conf(args)
 
+  def main(args: Array[String]): Unit = {
+    val conf = new Conf(args)
+
+    /*
     val conf = new Conf(Array(
       "-m", "local",
       "-r", "../storage/raw/",
@@ -15,6 +17,7 @@ object App {
       //"-p", "datamarts.firetimetravel.silver.fires"
       //"-p", "datamarts.firetimetravel.gold.fires"
     ))
+    */
 
     val spark = SparkSession
       .builder()
@@ -27,4 +30,5 @@ object App {
 
     PipelineRunner.run(spark, conf)
   }
+
 }

@@ -2,7 +2,6 @@ package org.wildfires.etl.datamarts.firetimetravel.utils
 
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf
-
 import java.time.Year
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -22,7 +21,6 @@ object Functions {
   def getDate: UserDefinedFunction = udf(_getDate _)
 
   def _daysFromInterval(startDateString: String , endDateString: String): List[String] = {
-
     val startDate = LocalDate.parse(startDateString)
     val endDate = LocalDate.parse(endDateString)
 
@@ -36,4 +34,5 @@ object Functions {
     daysBuffer.toList
   }
   def daysFromInterval: UserDefinedFunction = udf(_daysFromInterval _)
+
 }
