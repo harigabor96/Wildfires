@@ -1,8 +1,8 @@
 package testsuites.org.wildfires.etl.bronze.utils
 
-import org.wildfires.etl.bronze.wildfire.utils.Functions._
-import testutils._
 import org.scalatest._
+import testutils._
+import org.wildfires.etl.bronze.wildfire.utils.Functions._
 
 class Bronze_Utils_Functions extends FunSuite with SharedSparkSession {
 
@@ -12,4 +12,5 @@ class Bronze_Utils_Functions extends FunSuite with SharedSparkSession {
     assertThrows[Exception](_getExtractionDate(""))
     assertThrows[Exception](_getExtractionDate(null))
   }
+
 }

@@ -1,8 +1,8 @@
 package testsuites.org.wildfires.etl.datamarts.firetimetravel.gold
 
-import org.apache.spark.sql.functions.col
-import testutils._
 import org.scalatest._
+import testutils._
+import org.apache.spark.sql.functions.col
 
 class Datamarts_Firetimetravel_Gold_Arch_FireDay extends FunSuite with SharedSparkSession {
 
@@ -27,4 +27,5 @@ class Datamarts_Firetimetravel_Gold_Arch_FireDay extends FunSuite with SharedSpa
 
     assert(silverRowCount == goldDistinctRowCount)
   }
+
 }

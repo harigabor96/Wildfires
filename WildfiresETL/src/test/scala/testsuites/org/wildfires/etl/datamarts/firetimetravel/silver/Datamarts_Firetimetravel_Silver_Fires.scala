@@ -1,8 +1,8 @@
 package testsuites.org.wildfires.etl.datamarts.firetimetravel.silver
 
-import org.apache.spark.sql.functions.col
-import testutils._
 import org.scalatest._
+import testutils._
+import org.apache.spark.sql.functions.col
 
 class Datamarts_Firetimetravel_Silver_Fires extends FunSuite with SharedSparkSession {
 
@@ -33,4 +33,5 @@ class Datamarts_Firetimetravel_Silver_Fires extends FunSuite with SharedSparkSes
 
   //Filter Criteria Tests
     //Not needed for the current use case
+
 }

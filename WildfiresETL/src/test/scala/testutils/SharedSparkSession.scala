@@ -24,4 +24,5 @@ trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
     _spark.stop()
     _spark = null
   }
+
 }

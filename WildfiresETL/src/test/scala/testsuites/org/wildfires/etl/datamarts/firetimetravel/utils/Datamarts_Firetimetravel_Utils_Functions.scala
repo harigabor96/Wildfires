@@ -1,7 +1,7 @@
 package testsuites.org.wildfires.etl.datamarts.firetimetravel.utils
 
-import testutils._
 import org.scalatest._
+import testutils._
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
 
 class Datamarts_Firetimetravel_Utils_Functions extends FunSuite with SharedSparkSession {
@@ -27,4 +27,5 @@ class Datamarts_Firetimetravel_Utils_Functions extends FunSuite with SharedSpark
     assertThrows[Exception](_daysFromInterval("2022-01-01", "asdassdads"))
     assertThrows[Exception](_daysFromInterval("asdadasad", "2022-01-01"))
   }
+
 }

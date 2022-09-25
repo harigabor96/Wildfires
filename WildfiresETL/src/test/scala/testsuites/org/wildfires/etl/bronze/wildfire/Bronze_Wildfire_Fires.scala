@@ -1,7 +1,7 @@
 package testsuites.org.wildfires.etl.bronze.wildfire
 
-import testutils._
 import org.scalatest._
+import testutils._
 
 class Bronze_Wildfire_Fires extends FunSuite with SharedSparkSession {
   
@@ -21,4 +21,5 @@ class Bronze_Wildfire_Fires extends FunSuite with SharedSparkSession {
 
     assert(ingestedRowCount == rawRowCount)
   }
+
 }
