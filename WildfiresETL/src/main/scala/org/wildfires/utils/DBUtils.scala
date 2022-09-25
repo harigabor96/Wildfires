@@ -1,11 +1,11 @@
 package org.wildfires.utils
 
 import io.delta.tables.DeltaTable
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object DBUtils {
 
-  def createDatabaseIfNotExist(spark: SparkSession, databaseName: String) = {
+  def createDatabaseIfNotExist(spark: SparkSession, databaseName: String): DataFrame = {
     databaseName match {
       case null => throw new Exception("Database Name cannot be null!")
       case "" => throw new Exception("Database Name cannot be empty!")
@@ -17,7 +17,7 @@ object DBUtils {
     """)
   }
 
-  def createTableFromPath(spark: SparkSession, databaseName: String, tableName: String, deltaLocation: String) = {
+  def createTableFromPath(spark: SparkSession, databaseName: String, tableName: String, deltaLocation: String): DataFrame = {
     databaseName match {
       case null => throw new Exception("Database Name cannot be null!")
       case "" => throw new Exception("Database Name cannot be empty!")
@@ -43,7 +43,7 @@ object DBUtils {
     """)
   }
 
-  def optimizeTable(spark: SparkSession, databaseName: String, tableName: String) = {
+  def optimizeTable(spark: SparkSession, databaseName: String, tableName: String): DataFrame = {
     databaseName match {
       case null => throw new Exception("Database Name cannot be null!")
       case "" => throw new Exception("Database Name cannot be empty!")
@@ -59,7 +59,7 @@ object DBUtils {
     DeltaTable.forName(spark,s"$databaseName.$tableName").optimize().executeCompaction()
   }
 
-  def vacuumTable(spark: SparkSession, databaseName: String, tableName: String) = {
+  def vacuumTable(spark: SparkSession, databaseName: String, tableName: String): DataFrame = {
     databaseName match {
       case null => throw new Exception("Database Name cannot be null!")
       case "" => throw new Exception("Database Name cannot be empty!")

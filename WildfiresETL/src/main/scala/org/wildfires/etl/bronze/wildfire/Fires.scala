@@ -1,7 +1,7 @@
 package org.wildfires.etl.bronze.wildfire
 
 import org.apache.spark.sql.DataFrame
-import org.wildfires.etl.{GenericPipeline}
+import org.wildfires.etl.GenericPipeline
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.sql.streaming.Trigger

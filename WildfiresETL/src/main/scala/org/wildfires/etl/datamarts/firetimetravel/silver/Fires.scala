@@ -4,7 +4,7 @@ import io.delta.tables.DeltaTable
 import org.apache.spark.sql.functions.{first, _}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.wildfires.etl.{GenericPipeline}
+import org.wildfires.etl.GenericPipeline
 import org.wildfires.utils._
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
 

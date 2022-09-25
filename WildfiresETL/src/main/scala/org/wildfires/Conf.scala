@@ -1,6 +1,6 @@
 package org.wildfires
 
-import org.rogach.scallop.ScallopConf
+import org.rogach.scallop.{ScallopConf, ScallopOption}
 
 class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
   val master = opt[String](required = true)
