@@ -6,7 +6,7 @@ The scope of this project is nothing special as its' main aim is to show quality
 The source dataset can be found at:
 [https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires)
 ### Components
- - The "WildfiresETL" Scala project was built according to the design pattern described in "The Architecture" section and has been Unit and Integration tested.
+ - The "WildfiresETL" Scala project was built according to the design pattern described in "The Architecture" section and has been unit and integration tested.
  - The storage folder contains the "sample" version of a Data Lakehouse with the raw zone containing .csv files in a folder structure and the curated zone containing the usual delta tables.
  - The .pbix file contains a simple report to visualize the output data.
  
