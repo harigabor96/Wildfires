@@ -3,7 +3,8 @@ package testutils
 import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterAll, Suite}
 
-trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
+trait SharedSparkSession extends BeforeAndAfterAll {
+  self: Suite =>
 
   @transient protected var _spark: SparkSession = _
 

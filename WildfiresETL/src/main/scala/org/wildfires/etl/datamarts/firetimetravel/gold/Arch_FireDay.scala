@@ -1,11 +1,11 @@
 package org.wildfires.etl.datamarts.firetimetravel.gold
 
-import org.wildfires.etl.GenericPipeline
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.functions._
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
-import org.wildfires.utils.DBUtils
+import io.delta.tables.DeltaTable
+import org.wildfires.globals.GenericPipeline
 
 case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends GenericPipeline {
 
@@ -45,7 +45,7 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
   }
 
   override def load(transformedDf: DataFrame): Unit = {
-    DBUtils.createDatabaseIfNotExist(spark,s"$outputDatabaseName")
+    spark.sql(s"CREATE DATABASE IF NOT EXISTS $outputDatabaseName")
 
     transformedDf
       .writeStream
@@ -57,8 +57,8 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
 
-    DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
+    DeltaTable.forName(spark,s"$outputDatabaseName.$outputTableName").optimize().executeCompaction()
+    DeltaTable.forName(spark,s"$outputDatabaseName.$outputTableName").vacuum()
   }
 
 }

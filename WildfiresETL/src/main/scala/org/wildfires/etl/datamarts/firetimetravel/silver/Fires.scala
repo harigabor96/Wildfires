@@ -1,12 +1,11 @@
 package org.wildfires.etl.datamarts.firetimetravel.silver
 
-import org.wildfires.etl.GenericPipeline
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.functions._
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
-import org.wildfires.utils.DBUtils
 import io.delta.tables.DeltaTable
+import org.wildfires.globals.GenericPipeline
 
 case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericPipeline {
 
@@ -79,8 +78,8 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
             .mode("overwrite")
             .save(s"$curatedZonePath/$outputDataRelativePath")
 
-          DBUtils.createDatabaseIfNotExist(spark, outputDatabaseName)
-          DBUtils.createTableFromPath(spark, outputDatabaseName, outputTableName, s"$outputDataRelativePath")
+          spark.sql(s"CREATE DATABASE IF NOT EXISTS $outputDatabaseName")
+          spark.sql(s"CREATE TABLE $outputDatabaseName.$outputTableName USING DELTA LOCATION '$outputDataRelativePath'")
         }
 
         if (batchId != 0) {
@@ -122,8 +121,8 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
       .start()
       .awaitTermination()
 
-    DBUtils.optimizeTable(spark, outputDatabaseName, outputTableName)
-    DBUtils.vacuumTable(spark, outputDatabaseName, outputTableName)
+    DeltaTable.forName(spark,s"$outputDatabaseName.$outputTableName").optimize().executeCompaction()
+    DeltaTable.forName(spark,s"$outputDatabaseName.$outputTableName").vacuum()
   }
 
 }
