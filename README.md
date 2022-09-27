@@ -28,7 +28,7 @@ However in a modern architecture there is no better single source of truth than 
 ### Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
 
-Inmon also allowed persisting aggregations as long as the lowest grain data is also persisted, however considering the nature of streaming and how common late arriving data is, it is only viable when said aggregations are independent of batch size and result of commutative operations like addition.
+Inmon also allowed persisting aggregations as long as the lowest grain data is also persisted, however considering the nature of streaming and how common late arriving data is, it is only viable when said aggregations are independent of batch size and result of commutative operations like addition. In addition to this maintaining idempotence with a foreachBatch pipeline can be quite tricky, so aggregation in the Gold Zone is best to be avoided.  
 ### Schema Separation
 Just like aggregation, horizontal (join/merge) integration breaks when late arriving data is present as joining two tables via a pipeline would require the relevant batches of each data source to be available at the exact same time. Vertical integration (union/append) can be performed, however, it's not ideal as it would require two tables from separate sources to have the same schema. On top of this, the need might arise to separate the two tables in query time, which would mean filtering, which is more costly as an operation than union.
 
@@ -43,6 +43,6 @@ The schema for the final persistence layer (Gold Zone) is my own creation and it
 My solution is to represent this duality in the Data Lakehouse:
 -	Closed records should be treated as Archives, that have unique natural/business PKs for the entire dataset.
 -	Open records should be treated as Snapshots, that have unique natural/business PKs within each snapshot.
--	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive.
+-	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive (again, foreachBatch idempotence!).
 ### Dynamic Aggregation and Integration
 The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, aggregated, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL.
