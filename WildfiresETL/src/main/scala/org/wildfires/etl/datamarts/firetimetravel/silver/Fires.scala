@@ -83,35 +83,41 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
           DBUtils.createTableFromPath(spark, outputDatabaseName, outputTableName, s"$outputDataRelativePath")
         }
 
-        import spark.implicits._
+        if (batchId != 0) {
+          import spark.implicits._
 
-        val batchEventDates =
-          transformedBatch
-            .select(col("DiscoveryDate").cast("string"))
-            .dropDuplicates()
-            .map(_.getString(0))
-            .collect()
-            .mkString("','")
+          transformedBatch.cache()
 
-        DeltaTable
-          .forName(s"$outputDatabaseName.$outputTableName")
-          .as("deltaTable")
-          .merge(
-            transformedBatch.as("updates"),
-            s"""
-                deltaTable.DiscoveryDate IN ('$batchEventDates')
-                AND
-                (
-                  deltaTable.DiscoveryDate <=> updates.DiscoveryDate AND
-                  deltaTable.ContDate <=> updates.ContDate AND
-                  deltaTable.LATITUDE <=> updates.LATITUDE AND
-                  deltaTable.LONGITUDE <=> updates.LONGITUDE
-                )
-            """
-          )
-          .whenNotMatched()
-          .insertAll()
-          .execute()
+          val batchEventDates =
+            transformedBatch
+              .select(col("DiscoveryDate").cast("string"))
+              .dropDuplicates()
+              .map(_.getString(0))
+              .collect()
+              .mkString("','")
+
+          DeltaTable
+            .forName(s"$outputDatabaseName.$outputTableName")
+            .as("deltaTable")
+            .merge(
+              transformedBatch.as("updates"),
+              s"""
+                  deltaTable.DiscoveryDate IN ('$batchEventDates')
+                  AND
+                  (
+                    deltaTable.DiscoveryDate <=> updates.DiscoveryDate AND
+                    deltaTable.ContDate <=> updates.ContDate AND
+                    deltaTable.LATITUDE <=> updates.LATITUDE AND
+                    deltaTable.LONGITUDE <=> updates.LONGITUDE
+                  )
+              """
+            )
+            .whenNotMatched()
+            .insertAll()
+            .execute()
+
+          spark.sqlContext.clearCache()
+        }
       }
       .start()
       .awaitTermination()
