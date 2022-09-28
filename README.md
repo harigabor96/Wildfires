@@ -26,7 +26,7 @@ The independent data mart approach was labeled as an anti-pattern both by Inmon 
 
 However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver, Gold, Databricks SQL) that depend only on the Data Lake (Raw Zone, Bronze Zone).
 
-It is also important to avoid changing the ETL logic of Bronze and Data Mart modules that are already considered done, which could be achieved by keeping them closed to modification (SOLID). This can be done by:
+This modularity should also be reflected in the code structure in order to avoid breaking pipelines that are already in production during updates (Open-Closed Principle). This can be done by:
 - Avoiding the usage of project-level dependencies (shared util classes) within module packages.
 - Creating shared utils and modules as separate projects and updating their versions explicitly in pom.xmls.
 ### Persistence at the Lowest Granularity
