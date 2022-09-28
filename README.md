@@ -24,10 +24,10 @@ This design pattern is expected to be general-purpose which means that:
 ### Independent Data Marts
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should not contain contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
-However in a modern architecture there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver, Gold, Databricks SQL) that depend only on the Data Lake (Raw Zone, Bronze Zone).
+However, in a modern architecture there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver, Gold, Databricks SQL) that depend only on the Data Lake (Raw Zone, Bronze Zone).
 
 It is also important to avoid changing the ETL logic of Bronze and Data Mart modules that are already considered done, which could be achieved by keeping them closed to modification (SOLID). This can be done by:
-- Avoiding the usage of project-level dependencies (global utils) within module packages for smaller projects.
+- Avoiding the usage of project-level dependencies (shared util classes) within module packages.
 - Creating global utils and modules as separate projects and updating their versions explicitly in pom.xmls.
 ### Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
