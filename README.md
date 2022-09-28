@@ -24,7 +24,7 @@ This design pattern is expected to be general-purpose which means that:
 ### Independent Data Marts
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should not contain contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
-However, in a modern architecture there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver, Gold, Databricks SQL) that depend only on the Data Lake (Raw Zone, Bronze Zone).
+However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver, Gold, Databricks SQL) that depend only on the Data Lake (Raw Zone, Bronze Zone).
 
 It is also important to avoid changing the ETL logic of Bronze and Data Mart modules that are already considered done, which could be achieved by keeping them closed to modification (SOLID). This can be done by:
 - Avoiding the usage of project-level dependencies (shared util classes) within module packages.
