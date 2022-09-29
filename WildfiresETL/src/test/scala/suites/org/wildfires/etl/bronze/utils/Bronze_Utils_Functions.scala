@@ -1,10 +1,10 @@
 package suites.org.wildfires.etl.bronze.utils
 
-import org.scalatest._
-import org.wildfires.etl.bronze.wildfire.utils.Functions._
+import org.scalatest.funsuite.AnyFunSuite
 import testutils.SharedSparkSession
+import org.wildfires.etl.bronze.wildfire.utils.Functions._
 
-class Bronze_Utils_Functions extends FunSuite with SharedSparkSession {
+class Bronze_Utils_Functions extends AnyFunSuite with SharedSparkSession {
 
   test("getExtractionDate()") {
     assert(_getExtractionDate("/storage/raw/FPA_FOD_20170508/2022-09-12/in/Fires.csv") == "2022-09-12")

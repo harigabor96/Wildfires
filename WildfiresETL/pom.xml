@@ -5,345 +5,81 @@
   <version>1.0</version>
   <inceptionYear>2008</inceptionYear>
   <properties>
-    <scala.version>2.13.8</scala.version>
+    <scala.version>2.13.6</scala.version>
+    <scalatest.version>3.2.14</scalatest.version>
+    <scallop.version>4.1.0</scallop.version>
     <spark.version>3.3.0</spark.version>
+    <delta.version>2.1.0</delta.version>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.rogach</groupId>
-      <artifactId>scallop_2.13</artifactId>
-      <version>4.1.0</version>
-    </dependency>
+
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest_2.13</artifactId>
+      <version>${scalatest.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.rogach</groupId>
+      <artifactId>scallop_2.13</artifactId>
+      <version>${scallop.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-core_2.13</artifactId>
       <version>${spark.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql_2.13</artifactId>
       <version>${spark.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-streaming_2.13</artifactId>
       <version>${spark.version}</version>
     </dependency>
+
     <dependency>
       <groupId>io.delta</groupId>
       <artifactId>delta-core_2.13</artifactId>
-      <version>2.1.0</version>
+      <version>${delta.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.13</artifactId>
-      <version>3.1.1</version>
-      <scope>test</scope>
-    </dependency>
+
   </dependencies>
 
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <plugins>
+
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
         <version>3.3.2</version>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+        </configuration>
         <executions>
           <execution>
             <goals>
               <goal>compile</goal>
+              <goal>testCompile</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <scalaVersion>${scala.version}</scalaVersion>
-          <args>
-            <arg>-target:jvm-1.8</arg>
-          </args>
-        </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.1</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                    <exclude>META-INF/maven/**</exclude>
-                    <exclude>LICENSE</exclude>
-                    <exclude>META-INF/license/**</exclude>
-                  </excludes>
-                </filter>
-                <!-- <filter> <artifact>org.apache.spark:spark-sql_2.11</artifact>
-                    <excludes> <exclude>META-INF/*</exclude> </excludes> </filter> -->
-              </filters>
 
-              <!-- <relocations> <relocation> <pattern>com</pattern> <shadedPattern>repackaged.com</shadedPattern>
-                  <includes> <include>com.google.protobuf.**</include> <include>com.google.common.**</include>
-                  </includes> </relocation> </relocations> -->
-              <transformers>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/</resource>
-                </transformer>
-                <!-- <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                    <resource>META-INF/DEPENDENCIES</resource> </transformer> -->
-                <!-- <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                    <resource>META-INF/maven/</resource> </transformer> -->
-                <!-- <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                    <resource>META-INF</resource> <file>org.apache.spark.sql.sources.DataSourceRegister</file>
-                    </transformer> -->
-                <!-- <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                    <resource> META-INF/services/org.apache.spark.sql.sources.DataSourceRegister
-                    </resource> </transformer> -->
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.eclipse.jetty.http.HttpFieldPreEncoder</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.crypto.key.KeyProviderFactory</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.fs.FileSystem</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.io.compress.CompressionCodec</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.security.alias.CredentialProviderFactory</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.security.SecurityInfo</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>common-version-info.properties</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>core-default.xml</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>org.apache.hadoop.application-classloader.properties</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>digesterRules.xml</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>hdfs-default.xml</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.security.token.TokenIdentifier</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.security.token.TokenRenewer</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/javax.xml.datatype.DatatypeFactory</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/javax.xml.parsers.DocumentBuilderFactory</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/javax.xml.parsers.SAXParserFactory</resource>
-                </transformer>
-
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/javax.xml.validation.SchemaFactory</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.w3c.dom.DOMImplementationSourceList</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.xml.sax.driver</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.mapreduce.protocol.ClientProtocolProvider</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.hadoop.security.token.TokenIdentifier</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>mapred-default.xml</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>yarn-default.xml</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>yarn-version-info.properties</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/native/linux32/libleveldbjni.so</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/native/linux64/libleveldbjni.so</resource>
-                </transformer>
-
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/native/osx/libleveldbjni.jnilib</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/native/windows32/leveldbjni.dll</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/native/windows64/leveldbjni.dll</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/com.fasterxml.jackson.core.JsonFactory</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.commons.logging.LogFactory</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.glassfish.hk2.extension.ServiceLocatorGenerator</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/javax.ws.rs.ext.RuntimeDelegate</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.glassfish.jersey.internal.spi.AutoDiscoverable</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/javax.servlet.ServletContainerInitializer</resource>
-                </transformer>
-
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.glassfish.jersey.servlet.spi.AsyncContextDelegateProvider</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.glassfish.jersey.servlet.spi.FilterUrlMappingsProvider</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/native/libnetty_transport_native_epoll_x86_64.so</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/native/libnetty_transport_native_kqueue_x86_64.jnilib</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/com.fasterxml.jackson.core.ObjectCodec</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/com.fasterxml.jackson.databind.Module</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.spark.sql.sources.DataSourceRegister</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.spark.status.AppHistoryServerPlugin</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>scala-parser-combinators.properties</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>org.codehaus.commons.compiler.properties</resource>
-                </transformer>
-
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.apache.orc.DataMask$Provider</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>parquet.thrift</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/sun.net.spi.nameservice.NameServiceDescriptor</resource>
-                </transformer>
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/services/org.eclipse.jetty.http.HttpFieldPreEncoder</resource>
-                </transformer>
-
-                <transformer
-                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Main-Class>org.wildfires.App</Main-Class>
-                    <Build-Number>1.0</Build-Number>
-                  </manifestEntries>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -370,6 +106,45 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Main-Class>org.wildfires.App</Main-Class>
+                    <Build-Number>1.0</Build-Number>
+                  </manifestEntries>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>reference.conf</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 </project>

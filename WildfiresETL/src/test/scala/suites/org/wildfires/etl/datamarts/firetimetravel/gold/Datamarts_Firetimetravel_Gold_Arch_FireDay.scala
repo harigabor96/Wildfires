@@ -1,10 +1,10 @@
 package suites.org.wildfires.etl.datamarts.firetimetravel.gold
 
-import org.scalatest._
-import org.apache.spark.sql.functions.col
+import org.scalatest.funsuite.AnyFunSuite
 import testutils.SharedSparkSession
+import org.apache.spark.sql.functions.col
 
-class Datamarts_Firetimetravel_Gold_Arch_FireDay extends FunSuite with SharedSparkSession {
+class Datamarts_Firetimetravel_Gold_Arch_FireDay extends AnyFunSuite with SharedSparkSession {
 
   val silverSourcePath = "../storage/curated/dm_firetimetravel_silver.db/fires/data"
   val goldSourcePath = "../storage/curated/dm_firetimetravel_gold.db/arch_fireday/data"

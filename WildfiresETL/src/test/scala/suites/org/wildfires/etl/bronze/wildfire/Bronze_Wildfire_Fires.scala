@@ -1,9 +1,9 @@
 package suites.org.wildfires.etl.bronze.wildfire
 
-import org.scalatest._
+import org.scalatest.funsuite.AnyFunSuite
 import testutils.SharedSparkSession
 
-class Bronze_Wildfire_Fires extends FunSuite with SharedSparkSession {
+class Bronze_Wildfire_Fires extends AnyFunSuite with SharedSparkSession {
   
   val sourcePath = "../storage/curated/bronze_wildfire.db/fires/data"
 

@@ -1,10 +1,10 @@
 package suites.org.wildfires.etl.datamarts.firetimetravel.silver
 
-import org.scalatest._
-import org.apache.spark.sql.functions.col
+import org.scalatest.funsuite.AnyFunSuite
 import testutils.SharedSparkSession
+import org.apache.spark.sql.functions.col
 
-class Datamarts_Firetimetravel_Silver_Fires extends FunSuite with SharedSparkSession {
+class Datamarts_Firetimetravel_Silver_Fires extends AnyFunSuite with SharedSparkSession {
 
   val sourcePath = "../storage/curated/dm_firetimetravel_silver.db/fires/data"
 
