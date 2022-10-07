@@ -1,7 +1,7 @@
 package org.wildfires
 
 import org.apache.spark.sql.SparkSession
-import org.wildfires.globals.{Conf, PipelineRooter}
+import org.wildfires.globals.{Conf, Router}
 
 object App {
 
@@ -28,7 +28,7 @@ object App {
 
     spark.sparkContext.setLogLevel("ERROR")
 
-    PipelineRooter.execute(spark, conf)
+    Router.executePipeline(spark, conf)
   }
 
 }
