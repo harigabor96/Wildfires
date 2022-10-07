@@ -154,6 +154,7 @@
     <scallop.version>4.1.0</scallop.version>
     <scalatest.version>3.2.14</scalatest.version>
     <delta.version>2.1.0</delta.version>
+    <sparkxml.version>0.15.0</sparkxml.version>
     <spark.version>3.3.0</spark.version>
   </properties>
 </project>
