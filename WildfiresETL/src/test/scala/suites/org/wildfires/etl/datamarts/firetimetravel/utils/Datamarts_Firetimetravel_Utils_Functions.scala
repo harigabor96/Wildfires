@@ -1,10 +1,9 @@
 package suites.org.wildfires.etl.datamarts.firetimetravel.utils
 
 import org.scalatest.funsuite.AnyFunSuite
-import testutils.SharedSparkSession
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
 
-class Datamarts_Firetimetravel_Utils_Functions extends AnyFunSuite with SharedSparkSession {
+class Datamarts_Firetimetravel_Utils_Functions extends AnyFunSuite {
 
   test("_getDate()") {
     assert(_getDate(2022, 365) == "2022-12-31")

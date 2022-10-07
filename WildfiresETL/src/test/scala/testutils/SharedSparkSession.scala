@@ -5,7 +5,7 @@ import org.scalatest.{BeforeAndAfterAll, Suite}
 
 trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
 
-  protected var _spark: SparkSession = _
+  private var _spark: SparkSession = _
 
   def spark: SparkSession = _spark
 
