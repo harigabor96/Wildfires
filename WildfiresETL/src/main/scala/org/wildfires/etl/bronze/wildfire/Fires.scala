@@ -62,7 +62,7 @@ case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: Stri
     load(transform(extract()))
   }
 
-  override def extract(): DataFrame = {
+  override protected def extract(): DataFrame = {
     spark
       .readStream
       .option("sep", "\t")
@@ -71,12 +71,12 @@ case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: Stri
       .csv(inputPath)
   }
 
-  override def transform(extractedDf: DataFrame): DataFrame = {
+  override protected def transform(extractedDf: DataFrame): DataFrame = {
     extractedDf
       .withColumn("ExtractionDate", getExtractionDate(input_file_name()))
   }
 
-  override def load(transformedDf: DataFrame): Unit = {
+  override protected def load(transformedDf: DataFrame): Unit = {
     spark.sql(s"CREATE DATABASE IF NOT EXISTS $outputDatabaseName")
 
     transformedDf

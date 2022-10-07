@@ -20,14 +20,14 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
     load(extract())
   }
 
-  override def extract(): DataFrame = {
+  override protected def extract(): DataFrame = {
     spark
       .readStream
       .format("delta")
       .load(inputPath)
   }
 
-  override def transform(extractedDf: DataFrame): DataFrame = {
+  override protected def transform(extractedDf: DataFrame): DataFrame = {
 
     extractedDf
       .filter(
@@ -60,7 +60,7 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
       )
   }
 
-  override def load(transformedDf: DataFrame): Unit = {
+  override protected def load(transformedDf: DataFrame): Unit = {
 
     transformedDf
       .writeStream

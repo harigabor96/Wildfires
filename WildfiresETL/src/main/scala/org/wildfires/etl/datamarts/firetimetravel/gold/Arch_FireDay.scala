@@ -20,14 +20,14 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
     load(transform(extract()))
   }
 
-  override def extract(): DataFrame = {
+  override protected def extract(): DataFrame = {
     spark
       .readStream
       .format("delta")
       .load(inputPath)
   }
 
-  override def transform(extractedDf: DataFrame): DataFrame = {
+  override protected def transform(extractedDf: DataFrame): DataFrame = {
     extractedDf
       .withColumn("Date",
         explode_outer(
@@ -44,7 +44,7 @@ case class Arch_FireDay(spark: SparkSession, curatedZonePath: String) extends Ge
       )
   }
 
-  override def load(transformedDf: DataFrame): Unit = {
+  override protected def load(transformedDf: DataFrame): Unit = {
     spark.sql(s"CREATE DATABASE IF NOT EXISTS $outputDatabaseName")
 
     transformedDf
