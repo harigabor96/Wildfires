@@ -9,6 +9,7 @@
     <scalatest.version>3.2.14</scalatest.version>
     <scallop.version>4.1.0</scallop.version>
     <spark.version>3.3.0</spark.version>
+    <sparkxml.version>0.15.0</sparkxml.version>
     <delta.version>2.1.0</delta.version>
   </properties>
 
@@ -49,6 +50,12 @@
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-streaming_2.13</artifactId>
       <version>${spark.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.databricks</groupId>
+      <artifactId>spark-xml_2.13</artifactId>
+      <version>${sparkxml.version}</version>
     </dependency>
 
     <dependency>
