@@ -28,7 +28,6 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
   }
 
   override protected def transform(extractedDf: DataFrame): DataFrame = {
-
     extractedDf
       .filter(
         col("FOD_ID").isNotNull && col("FOD_ID") =!= "" &&
@@ -61,7 +60,6 @@ case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericP
   }
 
   override protected def load(transformedDf: DataFrame): Unit = {
-
     transformedDf
       .writeStream
       .trigger(Trigger.AvailableNow())
