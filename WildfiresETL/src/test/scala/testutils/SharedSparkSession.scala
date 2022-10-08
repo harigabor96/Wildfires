@@ -7,9 +7,9 @@ trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
 
   private var _spark: SparkSession = _
 
-  def spark: SparkSession = _spark
+  protected def spark: SparkSession = _spark
 
-  override def beforeAll(): Unit = {
+  override protected def beforeAll(): Unit = {
     _spark =
       SparkSession
         .builder()
