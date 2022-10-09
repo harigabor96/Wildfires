@@ -26,7 +26,7 @@ The independent data mart approach was labeled as an anti-pattern both by Inmon 
 
 However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver, Gold, Databricks SQL) that depend only on the Data Lake (Raw Zone, Bronze Zone).
 
-This modularity should also be reflected in the code structure in order to avoid breaking pipelines that are already in production during updates. This is best done by creating shared utils, bronze modules, and datamarts as separate repos and updating their versions explicitly in pom.xmls.
+This modularity should also be reflected in the code structure in order to avoid breaking pipelines that are already in production during updates. This is best done by creating shared utils, bronze modules, and datamarts as separate repos and updating dependency versions explicitly in pom.xmls.
 ### Preserving Data Quality - Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
 
