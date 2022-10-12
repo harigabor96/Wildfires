@@ -13,7 +13,7 @@ trait SharedSparkSession extends BeforeAndAfterAll { self: Suite =>
     _spark =
       SparkSession
         .builder()
-        .appName("Wildfires")
+        .appName("Test")
         .master("local")
         .getOrCreate()
 
