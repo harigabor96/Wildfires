@@ -10,7 +10,7 @@ import org.wildfires.globals.GenericPipeline
 
 case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: String) extends GenericPipeline {
 
-  val inputPath = s"$rawZonePath/FPA_FOD_20170508/{*}/in"
+  val inputPath = s"$rawZonePath/FPA_FOD_20170508/{2022-09-12,2022-09-13}/in"
 
   val outputDatabaseName = "bronze_wildfire"
   val outputTableName = "fires"

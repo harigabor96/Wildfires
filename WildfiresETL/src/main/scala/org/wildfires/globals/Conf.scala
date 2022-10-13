@@ -8,6 +8,7 @@ class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
   val rawZonePath = opt[String](required = true)
   val curatedZonePath = opt[String](required = true)
   val pipeline = opt[String](required = true)
+  val ingestPreviousDays = opt[Int]()
   verify()
 
 }
