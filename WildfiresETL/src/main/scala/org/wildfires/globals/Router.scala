@@ -7,7 +7,7 @@ object Router {
 
   def executePipeline(spark: SparkSession, conf: Conf): Unit = conf.pipeline() match {
     case "bronze.wildfire.fires" =>
-      bronze.wildfire.Fires(spark, conf.rawZonePath(), conf.curatedZonePath()).execute()
+      bronze.wildfire.Fires(spark, conf.rawZonePath(), conf.curatedZonePath(), conf.ingestPreviousDays.toOption).execute()
     case "datamarts.firetimetravel.silver.fires" =>
       datamarts.firetimetravel.silver.Fires(spark, conf.curatedZonePath()).execute()
     case "datamarts.firetimetravel.gold.fires" =>

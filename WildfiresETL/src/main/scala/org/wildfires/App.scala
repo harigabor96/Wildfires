@@ -6,17 +6,18 @@ import org.wildfires.globals.{Conf, Router}
 object App {
 
   def main(args: Array[String]): Unit = {
-    //val conf = new Conf(args)
+    val conf = new Conf(args)
 
+    /*
     val conf = new Conf(Array(
       "-m", "local",
       "-r", "../storage/raw/",
       "-c", "../storage/curated/",
-      "-p", "bronze.wildfire.fires",
-      //"-p", "datamarts.firetimetravel.silver.fires",
-      //"-p", "datamarts.firetimetravel.gold.fires",
-      "-i", "0"
+      "-p", "bronze.wildfire.fires" //, "-i", ""
+      //"-p", "datamarts.firetimetravel.silver.fires"
+      //"-p", "datamarts.firetimetravel.gold.fires"
     ))
+    */
 
     val spark = SparkSession
       .builder()
