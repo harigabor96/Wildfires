@@ -6,11 +6,12 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.wildfires.etl.bronze.wildfire.utils.Functions._
 import io.delta.tables.DeltaTable
-import org.wildfires.globals.{GenericPipeline, IngestionHelper}
+import org.wildfires.etl.bronze.wildfire.utils.FilePathBuilder
+import org.wildfires.globals.GenericPipeline
 
 case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: String, prevDaysToIngest: Option[Int]) extends GenericPipeline {
 
-  val inputPath = s"$rawZonePath/FPA_FOD_20170508/${IngestionHelper.getDayPattern(prevDaysToIngest)}/in"
+  val inputPath = s"$rawZonePath/FPA_FOD_20170508/${FilePathBuilder.getDayPattern(prevDaysToIngest)}/in"
 
   val outputDatabaseName = "bronze_wildfire"
   val outputTableName = "fires"

@@ -1,10 +1,10 @@
-package org.wildfires.globals
+package org.wildfires.etl.bronze.wildfire.utils
 
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import scala.collection.mutable.ListBuffer
 
-object IngestionHelper {
+object FilePathBuilder {
 
   def getDayPattern(previousDaysOpt: Option[Int]): String = {
     val previousDays = previousDaysOpt.getOrElse(return "{*}")
