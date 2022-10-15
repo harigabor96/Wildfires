@@ -62,7 +62,7 @@
               <transformers>
                 <transformer>
                   <manifestEntries>
-                    <Main-Class>org.wildfires.App</Main-Class>
+                    <Main-Class>org.module.App</Main-Class>
                     <Build-Number>1.0</Build-Number>
                   </manifestEntries>
                 </transformer>
