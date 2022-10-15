@@ -57,6 +57,12 @@
       <version>${delta.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.eztl</groupId>
+      <artifactId>eztl-core</artifactId>
+      <version>1.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>
