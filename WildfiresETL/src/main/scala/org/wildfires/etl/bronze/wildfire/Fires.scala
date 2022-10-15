@@ -7,7 +7,7 @@ import org.apache.spark.sql.functions._
 import org.wildfires.etl.bronze.wildfire.utils.Functions._
 import io.delta.tables.DeltaTable
 import org.eztl.core.etl.tGenericPipeline
-import org.wildfires.etl.bronze.wildfire.utils.FilePathBuilder
+import org.eztl.ingestion.FilePathBuilder
 
 case class Fires(spark: SparkSession, rawZonePath: String, curatedZonePath: String, prevDaysToIngest: Option[Int]) extends tGenericPipeline {
 

@@ -1,7 +1,7 @@
 package org.wildfires
 
 import org.apache.spark.sql.SparkSession
-import org.wildfires.globals.{Conf, Router}
+import org.wildfires.init.{Conf, Router}
 
 object App {
 

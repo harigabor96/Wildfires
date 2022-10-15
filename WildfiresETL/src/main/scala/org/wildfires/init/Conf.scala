@@ -1,4 +1,4 @@
-package org.wildfires.globals
+package org.wildfires.init
 
 import org.eztl.core.conf.tStreamingBronzeConf
 import org.rogach.scallop.ScallopConf
