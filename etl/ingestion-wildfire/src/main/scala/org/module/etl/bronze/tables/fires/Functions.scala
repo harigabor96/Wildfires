@@ -1,4 +1,4 @@
-package org.module.etl.bronzetables.fires
+package org.module.etl.bronze.tables.fires
 
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf

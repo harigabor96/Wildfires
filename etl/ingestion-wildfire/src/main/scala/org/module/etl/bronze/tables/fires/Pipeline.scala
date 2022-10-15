@@ -1,4 +1,4 @@
-package org.module.etl.bronzetables.fires
+package org.module.etl.bronze.tables.fires
 
 import io.delta.tables.DeltaTable
 import org.apache.spark.sql.functions._
@@ -7,7 +7,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.eztl.core.etl.tGenericPipeline
 import org.eztl.ingestion.FilePathBuilder
-import org.module.etl.bronzetables.fires.Functions._
+import Functions._
 
 case class Pipeline(spark: SparkSession, rawZonePath: String, curatedZonePath: String, prevDaysToIngest: Option[Int]) extends tGenericPipeline {
 

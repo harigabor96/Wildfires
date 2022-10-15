@@ -12,7 +12,7 @@ object App {
       "-m", "local",
       "-r", "../../storage/raw/",
       "-c", "../../storage/curated/",
-      "-p", "fires" //, "-i", ""
+      "-p", "bronze.fires" //, "-i", ""
     ))
 
     val spark = SparkSession

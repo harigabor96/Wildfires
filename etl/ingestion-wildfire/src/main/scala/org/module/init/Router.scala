@@ -11,8 +11,8 @@ object Router extends tGenericRouter {
     val c = conf.asInstanceOf[Conf]
 
     c.pipeline() match {
-    case "fires" =>
-      bronzetables.fires.Pipeline(spark, c.rawZonePath(), c.curatedZonePath(), c.ingestPreviousDays.toOption).execute()
+    case "bronze.fires" =>
+      bronze.tables.fires.Pipeline(spark, c.rawZonePath(), c.curatedZonePath(), c.ingestPreviousDays.toOption).execute()
     case _ =>
       throw new Exception("Pipeline is not registered in the router!")
     }

@@ -1,6 +1,6 @@
-package suites.org.module.etl.bronzetables.fires
+package suites.org.module.etl.bronze.tables.fires
 
-import org.module.etl.bronzetables.fires.Functions._
+import org.module.etl.bronze.tables.fires.Functions._
 import org.scalatest.funsuite.AnyFunSuite
 
 class Bronze_Fires_Functions extends AnyFunSuite {

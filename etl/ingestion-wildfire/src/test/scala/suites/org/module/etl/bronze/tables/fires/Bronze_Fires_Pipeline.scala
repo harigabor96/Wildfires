@@ -1,4 +1,4 @@
-package suites.org.module.etl.bronzetables.fires
+package suites.org.module.etl.bronze.tables.fires
 
 import org.scalatest.funsuite.AnyFunSuite
 import utils.SharedSparkSession
