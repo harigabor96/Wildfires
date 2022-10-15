@@ -12,9 +12,9 @@ object Router extends tGenericRouter {
 
     c.pipeline() match {
     case "silver.fires" =>
-      silvertables.fires.Pipeline(spark, c.curatedZonePath()).execute()
+      silver.tables.fires.Pipeline(spark, c.curatedZonePath()).execute()
     case "gold.arch_fireday" =>
-      goldtables.arch_fireday.Pipeline(spark, c.curatedZonePath()).execute()
+      gold.tables.arch_fireday.Pipeline(spark, c.curatedZonePath()).execute()
     case _ =>
       throw new Exception("Pipeline is not registered in the router!")
     }

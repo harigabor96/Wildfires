@@ -11,10 +11,9 @@ object App {
     /*
     val conf = new Conf(Array(
       "-m", "local",
-      "-r", "../storage/raw/",
-      "-c", "../storage/curated/",
-      //"-p", "datamarts.firetimetravel.silver.fires"
-      //"-p", "datamarts.firetimetravel.gold.fires"
+      "-c", "../../storage/curated/",
+      //"-p", "silver.fires"
+      //"-p", "gold.arch_fireday"
     ))
     */
 
