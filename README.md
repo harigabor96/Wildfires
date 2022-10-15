@@ -6,7 +6,7 @@ The scope of this project is nothing special as its' main aim is to show quality
 The source dataset can be found at:
 [https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires](https://www.kaggle.com/datasets/rtatman/188-million-us-wildfires)
 ### Components
- - The "WildfiresETL" Scala (and Spark) project contains the ETL pipelines. It has been built according to the design pattern described in "The Architecture" section and it has been unit and integration tested.
+ - The "etl" folder contains two Scala (and Spark) project modules which include the ETL pipelines. These have been built according to the design pattern described in "The Architecture" section and they have been unit and integration tested.
  - The storage folder contains the "sample" version of a Data Lakehouse with the raw zone containing .csv files in a folder structure and the curated zone containing the usual delta tables.
  - The .pbix file contains a simple Power BI report to visualize the output data.
  
@@ -21,12 +21,12 @@ This design pattern is expected to be general-purpose which means that:
 - It should not be affected by late arriving data.
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
-### Decentralization - Modular Data Marts and Bronze Zone
+### Decentralization - Modular Data Marts and Ingestion
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should not contain contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
-However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver, Gold, Databricks SQL) that depend only on the naturally source-aligned, thus modular, Data Lake (Raw Zone, Bronze Zone).
+However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver Zone, Gold Zone, Platinum Zone) that depend only on the naturally source-aligned, thus modular, Data Lake (Raw Zone) and its' ingested and columnarized version (Bronze Zone).
 
-This modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during updates and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by creating shared utils, bronze modules, and datamarts as separate repos, and updating and deploying them individually. If having multiple repos is not an option (like in this project), one should at least treat modules as separate packages that don't rely on each other or any global shared util.
+This modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during updates and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by creating shared utils, ingestion modules (Bronze), and datamarts (Silver, Gold) as separate projects, and updating and deploying them individually, preferably in a polyrepo structure (or in some cases monorepo, like this project).
 ### Preserving Data Quality - Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
 
@@ -47,4 +47,6 @@ My solution is to represent this duality in the Data Lakehouse:
 -	Open records should be treated as Snapshots, that have unique natural/business PKs within each snapshot.
 -	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive (again, foreachBatch idempotence!).
 ### Self-Service ELT - Dynamic Aggregation and Integration
-The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, aggregated, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL.
+The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, aggregated, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL. 
+
+These dynamic "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each dynamic "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Platinum modules.
