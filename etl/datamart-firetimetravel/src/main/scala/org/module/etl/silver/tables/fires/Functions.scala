@@ -15,7 +15,6 @@ object Functions {
       .atDay(doy)
       .toString
   }
-
   def getDate: UserDefinedFunction = udf(_getDate _)
 
 }
