@@ -1,8 +1,9 @@
 package org.wildfires.globals
 
+import org.eztl.core.conf.tStreamingBronzeConf
 import org.rogach.scallop.ScallopConf
 
-class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
+class Conf(arguments: Seq[String]) extends ScallopConf(arguments) with tStreamingBronzeConf {
 
   val master = opt[String](required = true)
   val rawZonePath = opt[String]() //Only for Bronze Modules

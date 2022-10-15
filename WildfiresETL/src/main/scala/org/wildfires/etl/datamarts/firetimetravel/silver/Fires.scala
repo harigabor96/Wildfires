@@ -5,9 +5,9 @@ import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.functions._
 import org.wildfires.etl.datamarts.firetimetravel.utils.Functions._
 import io.delta.tables.DeltaTable
-import org.wildfires.globals.GenericPipeline
+import org.eztl.core.etl.tGenericPipeline
 
-case class Fires (spark: SparkSession, curatedZonePath: String) extends GenericPipeline {
+case class Fires (spark: SparkSession, curatedZonePath: String) extends tGenericPipeline {
 
   val inputPath = s"$curatedZonePath/bronze_wildfire.db/fires/data"
 
