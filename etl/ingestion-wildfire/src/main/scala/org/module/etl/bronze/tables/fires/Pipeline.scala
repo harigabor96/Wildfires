@@ -6,12 +6,11 @@ import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.eztl.core.etl.tGenericPipeline
-import org.eztl.ingestion.FilePathBuilder
-import Functions._
+import org.eztl.ingestion.FilePathHelper._
 
 case class Pipeline(spark: SparkSession, rawZonePath: String, curatedZonePath: String, prevDaysToIngest: Option[Int]) extends tGenericPipeline {
 
-  val inputPath = s"$rawZonePath/FPA_FOD_20170508/${FilePathBuilder.getDayPattern(prevDaysToIngest)}/in"
+  val inputPath = s"$rawZonePath/FPA_FOD_20170508/${createDayPattern(prevDaysToIngest)}/in"
 
   val outputDatabaseName = "bronze_wildfire"
   val outputTableName = "fires"
@@ -74,7 +73,8 @@ case class Pipeline(spark: SparkSession, rawZonePath: String, curatedZonePath: S
 
   override protected def transform(extractedDf: DataFrame): DataFrame = {
     extractedDf
-      .withColumn("ExtractionDate", getExtractionDate(input_file_name()))
+      .withColumn("ExtractionDate", get_path_part(2)(input_file_name()))
+      .withColumn("FileSource", input_file_name())
   }
 
   override protected def load(transformedDf: DataFrame): Unit = {
