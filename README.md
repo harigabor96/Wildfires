@@ -19,7 +19,7 @@ This design pattern is expected to be general-purpose which means that:
 - It should have scalable ETL performance.
 - It should have scalable project and code complexity.
 - It should not lose data or create data errors by design.
-- It should not be affected by late arriving data.
+- It should not be affected by late-arriving data.
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
 ### Decentralization - Modular Data Marts and Ingestion
