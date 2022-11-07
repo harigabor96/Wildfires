@@ -12,14 +12,19 @@ The source dataset can be found at:
  
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/FireTimeTravel.PNG?raw=true)
 ## The Architecture
-This design pattern is expected to be general-purpose which means that:
-- It should support any type of analysis (BI, ML, AI, Ad-Hoc, etc.).
-- It should support both streaming and batch processing.
-- It should have a scalable data model.
-- It should have scalable ETL performance.
-- It should have scalable project and code complexity.
-- It should not lose data or create data errors by design.
-- It should not be affected by late arriving data.
+This design pattern is general-purpose which means that:
+- It supports any type of analysis (BI, ML, AI, Ad-Hoc, etc.).
+- It supports both streaming and batch processing.
+- It has a scalable data model.
+- It has scalable ETL performance.
+- It has scalable project and code complexity.
+- It does not lose data or create data errors by design.
+- It does not be affected by late arriving data.
+
+The main influences behind it are:
+- The Data Mesh Architecture [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
+- The Medallion Architecture [https://www.databricks.com/glossary/medallion-architecture](https://www.databricks.com/glossary/medallion-architecture)
+- Functional Data Engineering [https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
 ### Decentralization - Modular Data Marts and Ingestion
