@@ -19,7 +19,7 @@ This design pattern is general-purpose which means that:
 - It has scalable ETL performance.
 - It has scalable project and code complexity.
 - It does not lose data or create data errors by design.
-- It does not be affected by late arriving data.
+- It is not affected by late arriving data.
 
 The main influences behind it are:
 - The Data Mesh Architecture: [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
