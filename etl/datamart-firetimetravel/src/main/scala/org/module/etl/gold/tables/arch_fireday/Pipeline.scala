@@ -31,7 +31,7 @@ case class Pipeline(spark: SparkSession, curatedZonePath: String) extends tGener
     extractedDf
       .withColumn("Date",
         explode_outer(
-          daysFromInterval(col("DiscoveryDate"), col("ContDate"))
+          days_from_interval(col("DiscoveryDate"), col("ContDate"))
         )
       )
       .select(

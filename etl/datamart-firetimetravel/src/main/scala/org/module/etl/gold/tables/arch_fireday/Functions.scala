@@ -8,7 +8,7 @@ import scala.collection.mutable.ListBuffer
 
 object Functions {
 
-  def _daysFromInterval(startDateString: String, endDateString: String): List[String] = {
+  def _days_from_interval(startDateString: String, endDateString: String): List[String] = {
     val startDate = LocalDate.parse(startDateString)
     val endDate = LocalDate.parse(endDateString)
 
@@ -21,6 +21,6 @@ object Functions {
 
     daysBuffer.toList
   }
-  def daysFromInterval: UserDefinedFunction = udf(_daysFromInterval _)
+  def days_from_interval: UserDefinedFunction = udf(_days_from_interval _)
 
 }

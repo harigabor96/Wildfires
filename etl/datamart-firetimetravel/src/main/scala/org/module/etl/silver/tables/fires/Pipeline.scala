@@ -37,15 +37,15 @@ case class Pipeline(spark: SparkSession, curatedZonePath: String) extends tGener
         col("DISCOVERY_DOY").isNotNull && col("DISCOVERY_DOY") =!= ""
       )
       .withColumn("DiscoveryDate",
-        getDate(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
+        get_date(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
       )
       .withColumn("ContDate",
         when(
           col("CONT_DOY").isNull || col("CONT_DOY") === "",
-          getDate(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
+          get_date(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
         )
         .otherwise(
-          getDate(col("FIRE_YEAR"), col("CONT_DOY"))
+          get_date(col("FIRE_YEAR"), col("CONT_DOY"))
         )
       )
       .groupBy(
