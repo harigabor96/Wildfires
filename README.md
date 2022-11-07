@@ -14,10 +14,11 @@ The source dataset can be found at:
 ## The Architecture
 This design pattern is expected to be general-purpose which means that:
 - It should support any type of analysis (BI, ML, AI, Ad-Hoc, etc.).
-- It should support streaming and real-time analytics (as well as batch processing).
+- It should support both streaming and batch processing.
+- It should have a scalable data model.
 - It should have scalable ETL performance.
-- It should have scalable code complexity.
-- It should not lose data or create data errors.
+- It should have scalable project and code complexity.
+- It should not lose data or create data errors by design.
 - It should not be affected by late arriving data.
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
