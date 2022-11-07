@@ -1,5 +1,5 @@
 # Wildfires
-The purpose of this project is to show my skills in modern data engineering and data architecture with Apache Spark, Scala, and Azure Databricks, and to serve as a source of best practices for myself. The architecture described here is my own work and it tries to reconcile my first-hand experience with traditional data warehousing practices like Ralph Kimball’s and Bill Inmon’s works, and with newly emerging practices like Data Mesh, Medallion Architecture, and Functional Data Engineering.
+The purpose of this project is to show my skills in modern data engineering and data architecture with Apache Spark, Scala, and Databricks, and to serve as a source of best practices for myself. The architecture described here is my own work and it tries to reconcile my first-hand experience with traditional data warehousing practices like Ralph Kimball’s and Bill Inmon’s works, and with newly emerging practices like Data Mesh, Medallion Architecture, and Functional Data Engineering.
 ## The Project
 The scope of this project is nothing special as its' main aim is to show quality, not quantity. The ETL pipelines transform one source table that contains historical geographical data of US Wildfires, which is then visualized by a Power BI report.
 
