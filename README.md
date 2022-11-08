@@ -27,12 +27,18 @@ The main influences behind it are:
 - Functional Data Engineering: [https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
-### Decentralization - Modular Data Marts and Ingestion
+### Decentralization - Mesh between the Bronze Zone and Data Marts
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should not contain contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
-However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver Zone, Gold Zone, Platinum Zone) that depend only on the naturally source-aligned, thus modular, Data Lake (Raw Zone) and its' ingested and columnarized version (Bronze Zone).
+However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by **modular** and **consumer-aligned** Data Marts (Silver Zone, Gold Zone, Platinum Zone) that depend only on the **modular** and **source-aligned** ingested raw data (Bronze Zone).
 
-This modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during updates and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by creating shared utils, ingestion modules (Bronze), and datamarts (Silver, Gold) as separate projects, and updating and deploying them individually, preferably in a polyrepo structure (or in some cases monorepo, like this project).
+### Collaboration - Multiple Standardized Projects
+The modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during updates and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by creating shared utils, ingestion modules (Bronze), and datamarts (Silver, Gold) as separate projects, and updating and deploying them individually, preferably in a polyrepo structure (or in some cases monorepo, like this project).
+
+It is also important to standardize the projects and the tooling (as the Data Mesh architecture suggests) in order to avoid the spread of bad practices and inefficient ETL. This is best done by creating separate projects for common utils and interfaces and importing them as dependencies into each ETL module via pom.xml. This specific project depends on the following standardization modules (compiled version in the repos):
+ - EzTL-Core for standardized ETL pipelines and app initialization: [https://github.com/harigabor96/EzTL-Core](https://github.com/harigabor96/EzTL-Core)
+ - EzTL-IngestionTools for easy ingestion: [https://github.com/harigabor96/EzTL-IngestionTools](https://github.com/harigabor96/EzTL-IngestionTools)
+
 ### Preserving Data Quality - Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
 
@@ -44,7 +50,7 @@ These problems can be easily solved by keeping the DAG of each Data Mart as a "F
 ### Scalable Performance - Partition Pruning
 One of the issues of traditional architectures was that some operations that are necessary from a business point of view (deduplication, row updates) involve reading the whole historic dataset in the Data Warehouse. In a partitioned dataset, this can be mitigated by choosing the partitions carefully and making sure that partition pruning is in effect when possible.
 ### Handling Changing and Historical Data - Snapshots and Archives
-The schema for the final persistence layer (Gold Zone) is my own creation and it draws from OLTP database design (specifically the posting mechanism of ERP systems) and functional programming. My key observation here was that data present in the source is either:
+The schema for the final persistence layer (Gold Zone) is my own creation and it draws from OLTP database design (specifically the posting mechanism of ERP systems) and functional programming/data engineering. My key observation here was that data present in the source is either:
 - A closed record, that is never changed again, which means it’s immutable.
 -	An open record, that is subject to changes, which means it’s mutable.
 
@@ -55,4 +61,8 @@ My solution is to represent this duality in the Data Lakehouse:
 ### Self-Service ELT - Dynamic Aggregation and Integration
 The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, aggregated, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL. 
 
-These dynamic "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each dynamic "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Platinum modules and treated as the final layers of datamarts.
+An important element of this tier is UDF support, as some of the complex transformations are impractical or impossible to express through SQL. As of yet, this feature isn't included in Databricks SQL, however, there's a workaround that involves developing (and unit testing) the UDFs in separate Scala projects, compiling them to a JAR, and registering them to Hive as permanent functions:<br>
+[https://spark.apache.org/docs/3.3.0/sql-ref-syntax-ddl-create-function.html](https://spark.apache.org/docs/3.3.0/sql-ref-syntax-ddl-create-function.html)<br>
+[https://docs.databricks.com/sql/language-manual/sql-ref-functions-udf-hive.html](https://docs.databricks.com/sql/language-manual/sql-ref-functions-udf-hive.html)
+
+These dynamic Databricks SQL "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each dynamic "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Platinum modules and treated as the final layers of datamarts.
