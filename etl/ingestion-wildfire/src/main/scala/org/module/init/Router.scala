@@ -4,6 +4,7 @@ import org.apache.spark.sql.SparkSession
 import org.eztl.core.conf.tGenericConf
 import org.eztl.core.init.tGenericRouter
 import org.module.etl._
+import org.module.etl.zones.bronze.tables.fires.Pipeline
 
 object Router extends tGenericRouter {
 
@@ -12,7 +13,7 @@ object Router extends tGenericRouter {
 
     c.pipeline() match {
     case "bronze.fires" =>
-      bronze.tables.fires.Pipeline(spark, c.rawZonePath(), c.curatedZonePath(), c.ingestPreviousDays.toOption).execute()
+      Pipeline(spark, c.rawZonePath(), c.curatedZonePath(), c.ingestPreviousDays.toOption).execute()
     case _ =>
       throw new Exception("Pipeline is not registered in the router!")
     }
