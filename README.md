@@ -61,4 +61,4 @@ An important element of this tier is UDF support, as some of the complex transfo
 [https://spark.apache.org/docs/3.3.0/sql-ref-syntax-ddl-create-function.html](https://spark.apache.org/docs/3.3.0/sql-ref-syntax-ddl-create-function.html)<br>
 [https://docs.databricks.com/sql/language-manual/sql-ref-functions-udf-hive.html](https://docs.databricks.com/sql/language-manual/sql-ref-functions-udf-hive.html)
 
-These dynamic "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each dynamic "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Platinum modules and treated as the final layers of datamarts.
+These dynamic Databricks SQL "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each dynamic "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Platinum modules and treated as the final layers of datamarts.
