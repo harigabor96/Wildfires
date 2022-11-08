@@ -12,8 +12,8 @@ The source dataset can be found at:
  
  ### Dependencies
  If you want to run this app yourself, you have to download and locally install (with Maven) the compiled versions of:
- - [https://github.com/harigabor96/EzTL-Core](https://github.com/harigabor96/EzTL-Core)
- - [https://github.com/harigabor96/EzTL-IngestionTools](https://github.com/harigabor96/EzTL-IngestionTools)
+ - [https://github.com/harigabor96/EzTL-Core/releases/tag/v1.0](https://github.com/harigabor96/EzTL-Core/releases/tag/v1.0)
+ - [https://github.com/harigabor96/EzTL-IngestionTools/releases/tag/v1.0](https://github.com/harigabor96/EzTL-IngestionTools/releases/tag/v1.0)
  
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/FireTimeTravel.PNG?raw=true)
 ## The Architecture
