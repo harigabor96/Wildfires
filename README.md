@@ -40,7 +40,7 @@ However, in a modern architecture, there is no better single source of truth tha
 ### Collaboration - Multiple Standardized Projects
 The modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during updates and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by creating shared utils, ingestion modules (Bronze), and datamarts (Silver, Gold) as separate projects, and updating and deploying them individually, preferably in a polyrepo structure (or in some cases monorepo, like this project).
 
-It is also important to standardize the projects and the tooling (as the Data Mesh architecture suggests) in order to avoid the spread of bad practices and inefficient ETL. This is best done by creating separate projects for common utils and interfaces and importing them as dependencies into each ETL module via pom.xml. This specific project depends on the following standardization modules (compiled version in the repos):
+It is also important to standardize the projects and the tooling (as the Data Mesh architecture suggests) in order to avoid the spread of bad practices and inefficient ETL. This is best done by creating separate projects for common utils and interfaces and importing them as dependencies into each ETL module via pom.xml. This specific project depends on the following standardization modules:
  - EzTL-Core for standardized ETL pipelines and app initialization: [https://github.com/harigabor96/EzTL-Core](https://github.com/harigabor96/EzTL-Core)
  - EzTL-IngestionTools for easy ingestion: [https://github.com/harigabor96/EzTL-IngestionTools](https://github.com/harigabor96/EzTL-IngestionTools)
 
