@@ -10,7 +10,7 @@ import org.eztl.ingestion.FilePathHelper._
 
 case class Pipeline(spark: SparkSession, rawZonePath: String, curatedZonePath: String, prevDaysToIngest: Option[Int]) extends tGenericPipeline {
 
-  val inputPath = s"$rawZonePath/FPA_FOD_20170508/${createDayPattern(prevDaysToIngest)}/in"
+  val inputPath = s"$rawZonePath/FPA_FOD_20170508/fires/${createDayPattern(prevDaysToIngest)}/in"
 
   val outputDatabaseName = "bronze_wildfire"
   val outputTableName = "fires"
