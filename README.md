@@ -10,6 +10,11 @@ The source dataset can be found at:
  - The storage folder contains the "sample" version of a Data Lakehouse with the raw zone containing .csv files in a folder structure and the curated zone containing the usual delta tables.
  - The .pbix file contains a simple Power BI report to visualize the output data.
  
+ ### Dependencies
+ If you want to run this app yourself, you have to download and locally install (with Maven) the compiled versions of:
+ - [https://github.com/harigabor96/EzTL-Core](https://github.com/harigabor96/EzTL-Core)
+ - [https://github.com/harigabor96/EzTL-IngestionTools](https://github.com/harigabor96/EzTL-IngestionTools)
+ 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/FireTimeTravel.PNG?raw=true)
 ## The Architecture
 This design pattern is general-purpose which means that:
