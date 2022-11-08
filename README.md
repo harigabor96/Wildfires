@@ -27,12 +27,14 @@ The main influences behind it are:
 - Functional Data Engineering: [https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
-### Decentralization - Modular Data Marts and Ingestion
+### Decentralization - Mesh between the Bronze Zone and Data Marts
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should not contain contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
-However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular Data Marts (Silver Zone, Gold Zone, Platinum Zone) that depend only on the naturally source-aligned, thus modular, Data Lake (Raw Zone) and its' ingested and columnarized version (Bronze Zone).
+However, in a modern architecture, there is no better single source of truth than a Data Lake because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by modular **consumer-aligned** Data Marts (Silver Zone, Gold Zone, Platinum Zone) that depend only on the naturally **source-aligned**, thus modular, Data Lake (Raw Zone) and its' ingested and columnarized version (Bronze Zone).
 
-This modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during updates and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by creating shared utils, ingestion modules (Bronze), and datamarts (Silver, Gold) as separate projects, and updating and deploying them individually, preferably in a polyrepo structure (or in some cases monorepo, like this project).
+### Collaboration - Multiple Standardized Projects and Repos
+The modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during updates and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by creating shared utils, ingestion modules (Bronze), and datamarts (Silver, Gold) as separate projects, and updating and deploying them individually, preferably in a polyrepo structure (or in some cases monorepo, like this project).
+
 ### Preserving Data Quality - Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
 
