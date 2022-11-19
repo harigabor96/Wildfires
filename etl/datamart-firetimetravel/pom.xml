@@ -10,7 +10,7 @@
     <scallop.version>4.1.0</scallop.version>
     <spark.version>3.3.0</spark.version>
     <delta.version>2.1.0</delta.version>
-    <eztl.version>1.0</eztl.version>
+    <eztl.version>1.0.1</eztl.version>
   </properties>
 
   <dependencies>

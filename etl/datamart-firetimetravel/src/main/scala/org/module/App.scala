@@ -1,7 +1,7 @@
 package org.module
 
 import org.apache.spark.sql.SparkSession
-import org.module.init.{Conf, Router}
+import org.module.init.{Conf, SparkApp}
 
 object App {
 
@@ -26,7 +26,7 @@ object App {
 
     spark.sparkContext.setLogLevel("ERROR")
 
-    Router.executePipeline(spark, conf)
+    SparkApp.run(spark, conf)
   }
 
 }

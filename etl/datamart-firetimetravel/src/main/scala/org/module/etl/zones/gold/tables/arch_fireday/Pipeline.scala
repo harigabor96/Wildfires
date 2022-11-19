@@ -4,12 +4,13 @@ import io.delta.tables.DeltaTable
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.eztl.core.etl.tGenericPipeline
+import org.eztl.core.etl.GenericPipeline
 import Functions._
+import org.module.init.Conf
 
-case class Pipeline(spark: SparkSession, curatedZonePath: String) extends tGenericPipeline {
+case class Pipeline(spark: SparkSession, conf: Conf) extends GenericPipeline {
 
-  val inputPath = s"$curatedZonePath/dm_firetimetravel_silver.db/fires/data"
+  val inputPath = s"${conf.curatedZonePath()}/dm_firetimetravel_silver.db/fires/data"
 
   val outputDatabaseName = "dm_firetimetravel_gold"
   val outputTableName = "arch_fireday"
@@ -53,12 +54,13 @@ case class Pipeline(spark: SparkSession, curatedZonePath: String) extends tGener
       .outputMode("append")
       .format("delta")
       .option("path", s"$outputDataRelativePath")
-      .option("checkpointLocation", s"$curatedZonePath/$outputCheckpointRelativePath")
+      .option("checkpointLocation", s"${conf.curatedZonePath()}/$outputCheckpointRelativePath")
       .toTable(s"$outputDatabaseName.$outputTableName")
       .awaitTermination()
 
-    DeltaTable.forName(spark,s"$outputDatabaseName.$outputTableName").optimize().executeCompaction()
-    DeltaTable.forName(spark,s"$outputDatabaseName.$outputTableName").vacuum()
+    val deltaTable = DeltaTable.forName(spark,s"$outputDatabaseName.$outputTableName")
+    deltaTable.optimize().executeCompaction()
+    deltaTable.vacuum()
   }
 
 }
