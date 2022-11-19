@@ -1,5 +1,5 @@
 # Wildfires
-The purpose of this project is to show my skills in modern data engineering and data architecture with Apache Spark, Scala, and Databricks, and to serve as a source of best practices for myself. The architecture described here is my own work and it tries to reconcile my first-hand experience with traditional data warehousing practices like Ralph Kimball’s and Bill Inmon’s works, and with newly emerging practices like Data Mesh, Medallion Architecture, and Functional Data Engineering.
+The purpose of this project is to show my skills in modern data engineering and data architecture with Apache Spark, Scala, and Databricks, and to serve as a source of best practices for myself. The architecture described here is my own work and it tries to reconcile my first-hand experience with traditional data warehousing practices like Ralph Kimball’s and Bill Inmon’s works, and with newly emerging practices like Data Mesh, Medallion Architecture, and Semantic Lakehouse.
 ## The Project
 The scope of this project is nothing special as its' main aim is to show quality, not quantity. The ETL pipelines transform one source table that contains historical geographical data of US Wildfires, which is then visualized by a Power BI report.
 
@@ -47,8 +47,6 @@ It is also important to standardize the projects and the tooling (as the Data Me
 
 ### Preserving Data Quality - Persistence at the Lowest Granularity
 The main idea behind this architecture originates from Inmon, in a way that data should be persisted at the lowest granularity, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows lowering the granularity (explode) and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
-
-Inmon also allowed persisting aggregations as long as the lowest grain data is also persisted, however considering the nature of streaming and how common late arriving data is, it is only viable when said aggregations are independent of batch size and result of commutative operations like addition. On top of this, maintaining idempotence with a foreachBatch pipeline ([like this solution](https://towardsdatascience.com/idempotent-writes-to-delta-lake-tables-96f49addd4aa)) can be quite tricky, so aggregation in the Gold Zone is best to be avoided.  
 ### Flexibility of Consumption - Schema Separation
 Just like aggregation, horizontal (join/merge) integration breaks when late arriving data is present as joining two tables via a pipeline would require the relevant batches of each data source to be available at the exact same time. Vertical integration (union/append) can be performed, however, it's not ideal as it would require two tables from separate sources to have the same schema. On top of this, the need might arise to separate the two tables in query time, which would mean filtering, which is more costly as an operation than union.
 
@@ -63,11 +61,11 @@ The schema for the final persistence layer (Gold Zone) is my own creation and it
 My solution is to represent this duality in the Data Lakehouse:
 -	Closed records should be treated as Archives, that have unique natural/business PKs for the entire dataset.
 -	Open records should be treated as Snapshots, that have unique natural/business PKs within each snapshot.
--	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive (again, foreachBatch idempotence!).
-### Self-Service Analytics and Handling Asynchrony - The Semantic Layer
+-	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive ([foreachBatch idempotence](https://towardsdatascience.com/idempotent-writes-to-delta-lake-tables-96f49addd4aa)!).
+### Self-Service Analytics - The Semantic Layer
 The final element of the architecture is a powerful query engine (Photon) which lets the data consumers create aggregations and integration efficiently for themselves. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, grouped, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL.
 
-This layer, together with the thin analytical applications (for example Power BI) depending on it, is called the Semantic Layer and it is absolutely necessary to preserve data quality and to provide flexibility for data consumers. The main reasons for this are:
+This layer, together with the thin analytical applications (for example Power BI or AtScale) depending on it, is called the Semantic Layer and it is absolutely necessary to preserve data quality and to provide flexibility for data consumers. The main reasons for this are:
 
 - Aggregated data always contains less information than its' granular source, which restricts its' analytical potential.
 - Physical aggregation and integration are extremely sensitive to asynchronous data arrival, which makes them impossible to use with streaming and late arriving data without losing a (possibly large) portion of the data.
