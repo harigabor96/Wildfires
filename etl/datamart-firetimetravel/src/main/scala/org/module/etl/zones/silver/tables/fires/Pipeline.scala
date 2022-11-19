@@ -74,7 +74,6 @@ case class Pipeline(spark: SparkSession, conf: Conf) extends GenericPipeline {
             .write
             .partitionBy("DiscoveryDate")
             .format("delta")
-            .mode("overwrite")
             .save(s"${conf.curatedZonePath()}/$outputDataRelativePath")
 
           spark.sql(s"CREATE DATABASE IF NOT EXISTS $outputDatabaseName")
