@@ -64,10 +64,15 @@ My solution is to represent this duality in the Data Lakehouse:
 -	Closed records should be treated as Archives, that have unique natural/business PKs for the entire dataset.
 -	Open records should be treated as Snapshots, that have unique natural/business PKs within each snapshot.
 -	Tables with mixed records should be separated. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive (again, foreachBatch idempotence!).
-### Self-Service ELT - Dynamic Aggregation and Integration
-The final element of the architecture is a powerful query engine (Photon) which lets the user create aggregations and integration efficiently. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, aggregated, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL. 
+### Self-Service Analytics and Handling Asynchrony - The Semantic Layer
+The final element of the architecture is a powerful query engine (Photon) which lets the data consumers create aggregations and integration efficiently for themselves. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, grouped, etc. These operations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL.
 
-An important element of this tier is UDF support, as some of the complex transformations are impractical or impossible to express through SQL. As of yet, this feature isn't included in Databricks SQL, however, there's a workaround that involves developing (and unit testing) the UDFs in separate Scala projects, compiling them to JAR, and registering them to Hive as permanent functions:<br>
+This layer, together with the thin analytical applications (for example Power BI) depending on it, is called the Semantic Layer and it is absolutely necessary to preserve data quality and to provide flexibility for data consumers. The main reasons for this are:
+
+- Aggregated data always contains less information than its' granular source, which restricts its' analytical potential.
+- Physical aggregation and integration are extremely sensitive to asynchronous data arrival, which makes them impossible to use with streaming and late arriving data without losing a (possibly large) portion of the data.
+
+An important element of this layer is UDF support, as some of the complex transformations are impractical or impossible to express through SQL. As of yet, this feature isn't included in Databricks SQL, however, there's a workaround that involves developing (and unit testing) the UDFs in separate Scala projects, compiling them to JAR, and registering them to Hive as permanent functions:<br>
 [https://spark.apache.org/docs/3.3.0/sql-ref-syntax-ddl-create-function.html](https://spark.apache.org/docs/3.3.0/sql-ref-syntax-ddl-create-function.html)<br>
 [https://docs.databricks.com/sql/language-manual/sql-ref-functions-udf-hive.html](https://docs.databricks.com/sql/language-manual/sql-ref-functions-udf-hive.html)
 
