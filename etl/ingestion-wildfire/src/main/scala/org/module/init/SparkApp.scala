@@ -13,7 +13,7 @@ object SparkApp extends IngestionSparkApp {
     c.pipeline() match {
     case "bronze.fires" =>
       bronze.tables.fires.
-        Pipeline(spark, c.rawZonePath(), c.curatedZonePath(), c.ingestPreviousDays.toOption).execute()
+        Pipeline(spark, c).execute()
     case _ =>
       throw new Exception("Pipeline is not registered in the router!")
     }
