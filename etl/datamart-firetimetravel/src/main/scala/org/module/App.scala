@@ -19,7 +19,7 @@ object App {
 
     val spark = SparkSession
       .builder()
-      .appName("Wildfires")
+      .appName("datamart-firetimetravel")
       .config("spark.sql.warehouse.dir", conf.curatedZonePath())
       .master(conf.master())
       .getOrCreate()
