@@ -118,6 +118,10 @@ case class Pipeline(spark: SparkSession, conf: Conf) extends GenericPipeline {
       }
       .start()
       .awaitTermination()
+
+    val deltaTable = DeltaTable.forName(spark, s"$outputDatabaseName.$outputTableName")
+    deltaTable.optimize().executeCompaction()
+    deltaTable.vacuum()
   }
 
 }
