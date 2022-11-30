@@ -76,15 +76,12 @@ An important element of this layer is UDF support, as some of the complex transf
 
 These semantic Databricks SQL "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Platinum modules and treated as the final layers of datamarts.
 ## Sources
-**Data Mesh**
-
+**Data Mesh**<br>
 [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)<br>
-**Medallion Architecture**
-
+**Medallion Architecture**<br>
 [https://www.databricks.com/glossary/medallion-architecture](https://www.databricks.com/glossary/medallion-architecture)<br>
 [https://www.youtube.com/watch?v=LJtShrQqYZY&t=2489s](https://www.youtube.com/watch?v=LJtShrQqYZY&t=2489s)<br>
-**Semantic Lakehouse**
-
+**Semantic Lakehouse**<br>
 [https://www.databricks.com/kr/dataaisummit/session/how-implement-semantic-layer-your-lakehouse](https://www.databricks.com/kr/dataaisummit/session/how-implement-semantic-layer-your-lakehouse)<br>
 [https://www.youtube.com/watch?v=p3TLEV3oIBY](https://www.youtube.com/watch?v=p3TLEV3oIBY)<br>
 [https://assets.ctfassets.net/qy0rf2gaydgl/4zPJPPqu5OUkYeQw8MSWo0/c8e9d55489f47013733c8e10a30659d9/AtScale_TechnicalOverview_July_2019.pdf](https://assets.ctfassets.net/qy0rf2gaydgl/4zPJPPqu5OUkYeQw8MSWo0/c8e9d55489f47013733c8e10a30659d9/AtScale_TechnicalOverview_July_2019.pdf)<br>
@@ -92,7 +89,6 @@ These semantic Databricks SQL "databases" should have a single datamart as a sou
 [https://medium.com/@kyle.hale/architecting-aggregations-in-powerbi-with-databricks-sql-675899014ce3](https://medium.com/@kyle.hale/architecting-aggregations-in-powerbi-with-databricks-sql-675899014ce3)<br>
 [https://techcommunity.microsoft.com/t5/analytics-on-azure-blog/the-semantic-lakehouse-with-azure-databricks-and-power-bi/ba-p/3255174](https://techcommunity.microsoft.com/t5/analytics-on-azure-blog/the-semantic-lakehouse-with-azure-databricks-and-power-bi/ba-p/3255174)<br>
 [https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/azure-databricks-modern-analytics-architecture](https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/azure-databricks-modern-analytics-architecture)<br>
-**Functional Data Engineering**
-
+**Functional Data Engineering**<br>
 [https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)<br>
 [https://www.youtube.com/watch?v=4Spo2QRTz1k&t=1808s](https://www.youtube.com/watch?v=4Spo2QRTz1k&t=1808s)<br>
