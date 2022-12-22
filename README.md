@@ -23,8 +23,15 @@ This design pattern is general-purpose which means that:
 - It has a scalable data model.
 - It has scalable ETL performance.
 - It has scalable project and code complexity.
-- It does not lose data or create data errors by design.
-- It is not affected by late arriving data.
+- It does not create data errors, or lose data or information by design.
+- It is not affected by late arriving data/asynchrony.
+
+It achieves these criteria by adhering to the following concepts:
+- Incrementality
+- Idempotence
+- Functional Paradigm (Immutability, Pure functions/tasks)
+- Lowest Granularity (Aggregation and Integration on the fly)
+- Decoupling, Cohesion & Open-closed principle
 
 The main influences behind it are:
 - The Data Mesh Architecture: [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
