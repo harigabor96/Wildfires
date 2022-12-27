@@ -34,13 +34,13 @@ It achieves these criteria by adhering to the following concepts:
 - Decoupling, Cohesion & Open-closed principle
 
 The main influences behind it are:
-- The Data Mesh Architecture: [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
-- The Medallion Architecture: [https://www.databricks.com/glossary/medallion-architecture](https://www.databricks.com/glossary/medallion-architecture)
-- The Semantic Lakehouse: https://www.databricks.com/kr/dataaisummit/session/how-implement-semantic-layer-your-lakehouse 
 - Functional Data Engineering: [https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)
+- The Medallion Architecture: [https://www.databricks.com/glossary/medallion-architecture](https://www.databricks.com/glossary/medallion-architecture)
+- The Semantic Lakehouse: [https://www.databricks.com/kr/dataaisummit/session/how-implement-semantic-layer-your-lakehouse](https://www.databricks.com/kr/dataaisummit/session/how-implement-semantic-layer-your-lakehouse) 
+- The Data Mesh Architecture: [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
-### Decentralization - Mesh between the Bronze Zone and Data Marts
+### Decentralization - Data Marts depending directly on Raw Data
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should not contain contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
 However, in a modern architecture, there is no better single source of truth than raw data because one can make sure that it hasn't been touched by any buggy ETL... This effectively means that the monolithic horror of the EDW can be entirely replaced by **modular** and **consumer-aligned** Data Marts (Silver Zone, Gold Zone, Diamond Zone) that depend only on the **modular** and **source-aligned** ingested raw data (Bronze Zone). These Data Marts can be of varying scopes ranging from serving a single report to serving an entire department. The most important rule to keep in mind here is that each report should only consume data from a single Data Mart, for the sake of stability and agility.
@@ -83,8 +83,9 @@ An important element of this layer is UDF support, as some of the complex transf
 
 These semantic Databricks SQL "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Diamond modules and treated as the final layers of datamarts.
 ## Sources
-**Data Mesh**<br>
-[https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)<br>
+**Functional Data Engineering**<br>
+[https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)<br>
+[https://www.youtube.com/watch?v=4Spo2QRTz1k&t=1808s](https://www.youtube.com/watch?v=4Spo2QRTz1k&t=1808s)<br>
 **Medallion Architecture**<br>
 [https://www.databricks.com/glossary/medallion-architecture](https://www.databricks.com/glossary/medallion-architecture)<br>
 [https://www.youtube.com/watch?v=LJtShrQqYZY&t=2489s](https://www.youtube.com/watch?v=LJtShrQqYZY&t=2489s)<br>
@@ -96,6 +97,6 @@ These semantic Databricks SQL "databases" should have a single datamart as a sou
 [https://medium.com/@kyle.hale/architecting-aggregations-in-powerbi-with-databricks-sql-675899014ce3](https://medium.com/@kyle.hale/architecting-aggregations-in-powerbi-with-databricks-sql-675899014ce3)<br>
 [https://techcommunity.microsoft.com/t5/analytics-on-azure-blog/the-semantic-lakehouse-with-azure-databricks-and-power-bi/ba-p/3255174](https://techcommunity.microsoft.com/t5/analytics-on-azure-blog/the-semantic-lakehouse-with-azure-databricks-and-power-bi/ba-p/3255174)<br>
 [https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/azure-databricks-modern-analytics-architecture](https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/azure-databricks-modern-analytics-architecture)<br>
-**Functional Data Engineering**<br>
-[https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)<br>
-[https://www.youtube.com/watch?v=4Spo2QRTz1k&t=1808s](https://www.youtube.com/watch?v=4Spo2QRTz1k&t=1808s)<br>
+**Data Mesh**<br>
+[https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)<br>
+[https://www.youtube.com/watch?v=PhBTci_1aKA](https://www.youtube.com/watch?v=PhBTci_1aKA)<br>
