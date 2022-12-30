@@ -27,11 +27,11 @@ This design pattern is general-purpose which means that:
 - It is not affected by late arriving data/asynchrony.
 
 It achieves these criteria by adhering to the following concepts:
-- Decoupling, Cohesion & Open-closed principle (**[1](https://github.com/harigabor96/Wildfires/blob/main/README.md#1-decentralization---data-marts-depending-directly-on-raw-data), [2](https://github.com/harigabor96/Wildfires/edit/main/README.md#2-democratization-collaboration---multiple-decoupled-and-standardized-projects)**)
-- Incrementality (**[3](https://github.com/harigabor96/Wildfires/edit/main/README.md#3-scaling-performance---incrementality-idempotence--partition-pruning)**)
-- Idempotence (**[3](https://github.com/harigabor96/Wildfires/edit/main/README.md#3-scaling-performance---incrementality-idempotence--partition-pruning)**)
-- Functional Paradigm (Immutability, Pure functions/tasks) (**[4](https://github.com/harigabor96/Wildfires/edit/main/README.md#4-handling-changing-and-historical-data---functional-data-engineering-with-snapshots-and-archives)**)
-- Lowest Granularity (Aggregation and Integration on the fly) (**[5](https://github.com/harigabor96/Wildfires/edit/main/README.md#5-preserving-data-quality-and-providing-flexibility-for-analytics---persistence-at-the-lowest-granularity-and-schema-separation), [6](https://github.com/harigabor96/Wildfires/edit/main/README.md#6-self-service-analytics--handling-late-arriving-dataasynchrony---aggregation-and-integration-on-the-fly-with-the-semantic-layer)**)
+- Decoupling, Cohesion & Open-closed principle (**[1](https://github.com/harigabor96/Wildfires/blob/main/README.md#1-decentralization---data-marts-depending-directly-on-raw-data), [2](https://github.com/harigabor96/Wildfires/blob/main/README.md#2-democratization-collaboration---multiple-decoupled-and-standardized-projects)**)
+- Incrementality (**[3](https://github.com/harigabor96/Wildfires/blob/main/README.md#3-scaling-performance---incrementality-idempotence--partition-pruning)**)
+- Idempotence (**[3](https://github.com/harigabor96/Wildfires/blob/main/README.md#3-scaling-performance---incrementality-idempotence--partition-pruning)**)
+- Functional Paradigm (Immutability, Pure functions/tasks) (**[4](https://github.com/harigabor96/Wildfires/blob/main/README.md#4-handling-changing-and-historical-data---functional-data-engineering-with-snapshots-and-archives)**)
+- Lowest Granularity (Aggregation and Integration on the fly) (**[5](https://github.com/harigabor96/Wildfires/blob/main/README.md#5-preserving-data-quality-and-providing-flexibility-for-analytics---persistence-at-the-lowest-granularity-and-schema-separation), [6](https://github.com/harigabor96/Wildfires/blob/main/README.md#6-self-service-analytics--handling-late-arriving-dataasynchrony---aggregation-and-integration-on-the-fly-with-the-semantic-layer)**)
 
 The main influences behind it are:
 - Functional Data Engineering: [https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)
