@@ -84,7 +84,7 @@ The final element of the architecture is a powerful query engine (Databricks SQL
 
 This layer, together with the thin analytical applications (for example Power BI or AtScale) depending on it, is called the Semantic Layer and it is absolutely necessary to preserve data quality and to provide flexibility for data consumers. The main reasons for this are:
 
-- Aggregated data always contains less information than its' granular source, which restricts its' analytical potential.
+- Aggregated data always contains less information than its' granular source, which restricts the analytical potential of physically stored aggregates.
 - Physical aggregation and integration are extremely sensitive to asynchronous data arrival, which makes them impossible to use with streaming and late arriving data without losing a (possibly large) portion of the data.
 
 An important element of this layer is UDF support, as some of the complex transformations are impractical or impossible to express through SQL. As of yet, this feature isn't included in Databricks SQL, however, there's a workaround that involves developing (and unit testing) the UDFs in separate Scala projects, compiling them to JAR, and registering them to Hive as permanent functions:<br>
