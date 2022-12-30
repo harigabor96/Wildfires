@@ -85,7 +85,9 @@ An important element of this layer is UDF support, as some of the complex transf
 
 These semantic Databricks SQL "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Diamond modules and treated as the final layers of datamarts.
 
-### Scaling Performance - Partition Pruning
+### Scaling Performance - Incrementality, Idempotence & Partition Pruning
+While incremental data processing is a relatively common practice, it's worth mentioning because the bad practice of recomputing entire historic datasets overnight is still present in data engineering. I think this is not always the fault of the individual data engineer as many frameworks (including Spark without Structured Streaming) don't have a standard tool for performing idempotent and incremental writes. Despite this, it's still a hard requirement for ETL pipelines to only process newly arrived data (incrementality) to have a semi-constant performance in the long run, and to only process data once (idempotence) to preserve data quality.
+
 One of the issues of traditional architectures was that some operations that are necessary from a business point of view (deduplication, row updates) involve reading the whole historic dataset in the Data Warehouse. In a partitioned dataset, this can be mitigated by choosing the partitions carefully and making sure that partition pruning is in effect when possible.
 
 ## Sources
