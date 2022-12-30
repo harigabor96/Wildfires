@@ -75,7 +75,7 @@ An important element of this layer is UDF support, as some of the complex transf
 
 These semantic Databricks SQL "databases" should have a single datamart as a source, to minimize the number of dependencies, thus the risk of unintentional breaking. As a consequence of this strategy, each "database" will reflect a single gold (and silver) zone, which means these "databases" can be called Diamond modules and treated as the final layers of datamarts.
 
-### Handling Changing and Historical Data - Snapshots and Archives
+### Handling Changing and Historical Data - Functional Data Engineering with Snapshots and Archives
 The schema for the final persistence layer (Gold Zone) is my own creation and it draws from OLTP database design (specifically the posting mechanism of ERP systems) and functional programming/data engineering. My key observation here was that data present in the source is either:
 - A closed record, that is never changed again, which means it’s immutable.
 -	An open record, that is subject to changes, which means it’s mutable.
