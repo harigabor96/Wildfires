@@ -27,7 +27,7 @@ This design pattern is general-purpose which means that:
 - It is not affected by late arriving data/asynchrony.
 
 It achieves these criteria by adhering to the following concepts:
-- Lakehouse Concept & Open-closed principle (**[1](https://github.com/harigabor96/Wildfires/blob/main/README.md#1-decentralization---data-marts-depending-directly-on-raw-data)**)
+- Open-closed principle (**[1](https://github.com/harigabor96/Wildfires/blob/main/README.md#1-decentralization---data-marts-depending-directly-on-raw-data)**)
 - Decoupling (**[2](https://github.com/harigabor96/Wildfires/blob/main/README.md#2-democratization-collaboration---multiple-decoupled-and-standardized-projects)**)
 - Incrementality & Idempotence (**[3](https://github.com/harigabor96/Wildfires/blob/main/README.md#3-scaling-performance---incrementality-idempotence--partition-pruning)**)
 - Functional Paradigm (**[4](https://github.com/harigabor96/Wildfires/blob/main/README.md#4-handling-changing-and-historical-data---functional-data-engineering-with-snapshots-and-archives)**)
