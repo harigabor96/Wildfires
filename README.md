@@ -41,7 +41,7 @@ The main influences behind it are:
 - The Data Mesh Architecture: [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
-### 1. Decentralization - Data Marts depending directly on Raw Data
+### 1. Data Marts depending directly on the modification-resistant Raw Data
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should be cleansed and integrated to avoid containing contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
 However, in a modern architecture, there is no better single source of truth than raw data. One reason for this is that data cleansing is a subjective process which often results in unintentionally losing information, thus losing potential analytical value (for example duplicate analysis). Another reason is that cleansing logic cannot be developed in an incremental/agile way because all the Data Marts depending on an EDW are tightly coupled to it by the data flowing between them. This is extremely problematic because cleansing is also error-prone and rarely bug-free on the first try, which means that every time a new version of the EDW releases it potentially breaks/bugs multiple Data Marts. On top of this, cleansing all the data in a standardized way wastes human, compute, and storage resources during the very common use-case when only a small filtered and/or selected subset of the data is required for the analysis.
@@ -50,19 +50,19 @@ The underlying reason for most of these problems is that the Enterprise Data War
 
 This effectively means that the monolithic horror of the EDW should be entirely replaced by **modular** and **consumer-aligned Data Marts**  (Silver Zone, Gold Zone, Diamond Zone) that depend only on the **modular** and **source-aligned ingested raw data** (Bronze Zone). These Data Marts can be of varying scopes ranging from serving a single report to serving an entire department.
 
-### 2. Democratization, Collaboration - Multiple Decoupled and Standardized Projects
+### 2. Multiple Decoupled and Standardized Projects
 The modularity should also be reflected in the code structure to avoid breaking pipelines that are already in production during deployment and to provide a scalable codebase that can be worked on by multiple separate data teams. This is best done by **macro-level decoupling**, which means creating shared utils, ingestion modules (Bronze), and datamarts (Silver, Gold) as separate projects, and updating and deploying them individually, preferably in a polyrepo structure (or in some cases monorepo, like this project). This design philosophy should be also enforced on reports, meaning that a report should only consume data from a single Data Mart. **Micro-level decoupling** is also beneficial as thinking about table/pipeline-level packages within (larger) projects as standalone modules allows independent pipeline deployment within projects and leaves more flexibility of implementation to the indvidual data engineer.
 
 It is also important to **standardize the projects and the tooling** (as the Data Mesh architecture suggests) in order to avoid the spread of bad practices and inefficient ETL. This is best done by creating separate projects for common utils and interfaces and importing them as dependencies into each ETL module via pom.xml. This specific project depends on the following standardization modules:
  - EzTL-Core for standardized ETL pipelines and app initialization: [https://github.com/harigabor96/EzTL-Core](https://github.com/harigabor96/EzTL-Core)
  - EzTL-IngestionTools for easy ingestion: [https://github.com/harigabor96/EzTL-IngestionTools](https://github.com/harigabor96/EzTL-IngestionTools)
 
-### 3. Scaling Performance - Incrementality, Idempotence & Partition Pruning
+### 3. Incrementality, Idempotence & Partitioning
 While incremental data processing is a relatively common practice, it's worth mentioning because the bad practice of recomputing entire historic datasets overnight is still present in data engineering. I think this is not always the fault of the individual data engineer as many frameworks (including Spark without Structured Streaming) don't have a standard tool for performing idempotent and incremental writes. Despite this, it's still a hard requirement for ETL pipelines to **only process newly arrived data (incrementality)** to have a semi-constant performance in the long run, and to **only process data once (idempotence)** to preserve data quality.
 
 One of the issues of traditional architectures was that some operations that are necessary from a business point of view (deduplication, row updates) involve reading the whole historic dataset in the Data Warehouse. In a partitioned dataset, this can be mitigated by **choosing the partitions carefully and making sure that partition pruning is in effect when possible**.
 
-### 4. Handling Changing and Historical Data - Functional Data Engineering with Snapshots and Archives
+### 4. Functional Data Engineering with Snapshots and Archives
 The schema for the final persistence layer (Gold Zone) draws from OLTP database design (specifically the posting mechanism of ERP systems) and functional programming/data engineering. My key observation here was that data present in the source is either:
 - A closed record, that is never changed again, which means it’s immutable.
 -	An open record, that is subject to changes, which means it’s mutable.
@@ -72,14 +72,14 @@ My solution is to represent this duality in the Data Lakehouse:
 -	**Open records should be treated as Snapshots**, that have unique natural/business PKs within each snapshot.
 -	**Tables with mixed records should be separated**. When it’s not possible to do so, they should either be treated as Snapshots or an updatable Archive ([foreachBatch idempotence](https://towardsdatascience.com/idempotent-writes-to-delta-lake-tables-96f49addd4aa)!).
 
-### 5. Preserving Data Quality and providing Flexibility for Analytics - Persistence at the Lowest Granularity and Schema Separation
+### 5. Persistence at the Lowest Granularity and Schema Separation
 The main idea behind this architecture originates from Inmon, in a way that **data should be persisted at the lowest granularity**, which eliminates the problems that emerge from the combination of varying batch sizes, late-arriving data, and aggregation/windowing. It's worth noting that this design pattern allows **lowering the granularity (explode)** and storing tables of different grains separately (Gold Zone) to provide a flexible and clear structure for analysis.
 
 Just like aggregation, horizontal (join/merge) integration breaks when late arriving data is present as joining two tables via a pipeline would require the relevant batches of each data source to be available at the exact same time. Vertical integration (union/append) can be performed, however, it's not ideal as it would require two tables from separate sources to have the same schema. On top of this, the need might arise to separate the two tables in query time, which would mean filtering, which is more costly as an operation than union.
 
 These problems can be easily solved by **keeping the DAG of each Data Mart as a "Forest"** where Bronze tables are the trunks and Gold tables are the topmost branches. When the **separation (filtering) of tables with multiple business event/entity types into individual tables** is added on top of this, the Gold Zone will provide maximum flexibility and performance for query time aggregation and integration, and also minimize storage and schema complexity.
 
-### 6. Self-Service Analytics & Handling Late Arriving Data/Asynchrony - Aggregation and Integration on the fly with the Semantic Layer
+### 6. Aggregation and Integration on the fly with the Semantic Layer
 The final element of the architecture is a powerful query engine (Databricks SQL with Photon) which lets the data consumers create **on-the-fly aggregations and integration** efficiently for themselves. Here, ad-hoc queries can be written and executed, an analytics-specific schema (Snowflake, Star, etc.) can be applied, tables can be joined, unioned, grouped, etc. These transformations are not necessarily re-calculated every time when a user executes a query as caching query results is supported by Databricks SQL.
 
 This layer, together with the thin analytical applications (for example Power BI or AtScale) depending on it, is called the Semantic Layer and it is absolutely necessary to preserve data quality and to provide flexibility for data consumers. The main reasons for this are:
