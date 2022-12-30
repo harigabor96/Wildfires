@@ -27,11 +27,11 @@ This design pattern is general-purpose which means that:
 - It is not affected by late arriving data/asynchrony.
 
 It achieves these criteria by adhering to the following concepts:
+- Decoupling, Cohesion & Open-closed principle
 - Incrementality
 - Idempotence
 - Functional Paradigm (Immutability, Pure functions/tasks)
 - Lowest Granularity (Aggregation and Integration on the fly)
-- Decoupling, Cohesion & Open-closed principle
 
 The main influences behind it are:
 - Functional Data Engineering: [https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a](https://maximebeauchemin.medium.com/functional-data-engineering-a-modern-paradigm-for-batch-data-processing-2327ec32c42a)
