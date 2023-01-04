@@ -50,6 +50,7 @@ The main reason why the EDW's approach is problematic is that it takes the owner
 - The central team will be unaware which data marts depend on a certain version of the truth.
 - The central team will be unaware whether a modification breaks dependent data marts.
 - The central team will have to constantly satisfy consumer-specific requests.
+
 As the number of data mart dependencies grows, the above problems will lead to frequent and unintentional breaking of data marts, a lot of data mart downtime, and the need for constant ad-hoc data mart bug fixes.
 
 The alternative for this approach is having cleansing logic in the data marts which eliminates all previously mentioned problems and only has possibly higher storage and compute consumption as a tradeoff. This effectively means that the monolithic horror of the EDW is entirely replaced by **modular** and **consumer-aligned Data Marts**  (Silver Zone, Gold Zone, Diamond Zone) that depend only on the **modular** and **source-aligned ingested raw data** (Bronze Zone). The Bronze Zone is preferred to the Raw/Landing Zone as the last layer of the source-aligned modules because Delta ingestion can be a very costly process (as all data in raw/landing is ingested) and because a well-written Bronze pipeline should only ever be modified when schema evolution happens. An additional note to this is that the Data Marts can be of varying scopes ranging from serving a single report to serving an entire department.
