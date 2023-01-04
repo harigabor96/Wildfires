@@ -6,6 +6,7 @@ import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.eztl.core.etl.GenericPipeline
 import Functions._
+import org.apache.spark.sql.expressions.Window
 import org.module.init.Conf
 
 case class Pipeline(spark: SparkSession, conf: Conf) extends GenericPipeline {
@@ -29,35 +30,49 @@ case class Pipeline(spark: SparkSession, conf: Conf) extends GenericPipeline {
   }
 
   override protected def transform(extractedDf: DataFrame): DataFrame = {
-    extractedDf
-      .filter(
-        col("FOD_ID").isNotNull && col("FOD_ID") =!= "" &&
-        col("FIRE_YEAR").isNotNull && col("FIRE_YEAR") =!= "" &&
-        col("LATITUDE").isNotNull && col("LATITUDE") =!= "" &&
-        col("LONGITUDE").isNotNull && col("LONGITUDE") =!= "" &&
-        col("DISCOVERY_DOY").isNotNull && col("DISCOVERY_DOY") =!= ""
-      )
-      .withColumn("DiscoveryDate",
-        get_date(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
-      )
-      .withColumn("ContDate",
-        when(
-          col("CONT_DOY").isNull || col("CONT_DOY") === "",
+    val cleansedDf =
+      extractedDf
+        .filter(
+          col("FOD_ID").isNotNull && col("FOD_ID") =!= "" &&
+          col("FIRE_YEAR").isNotNull && col("FIRE_YEAR") =!= "" &&
+          col("LATITUDE").isNotNull && col("LATITUDE") =!= "" &&
+          col("LONGITUDE").isNotNull && col("LONGITUDE") =!= "" &&
+          col("DISCOVERY_DOY").isNotNull && col("DISCOVERY_DOY") =!= ""
+        )
+        .withColumn("DiscoveryDate",
           get_date(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
         )
-        .otherwise(
-          get_date(col("FIRE_YEAR"), col("CONT_DOY"))
+        .withColumn("ContDate",
+          when(
+            col("CONT_DOY").isNull || col("CONT_DOY") === "",
+            get_date(col("FIRE_YEAR"), col("DISCOVERY_DOY"))
+          )
+          .otherwise(
+            get_date(col("FIRE_YEAR"), col("CONT_DOY"))
+          )
+        )
+        .select(
+          col("DiscoveryDate").cast("date").as("DiscoveryDate"),
+          col("ContDate").cast("date").as("ContDate"),
+          col("LATITUDE").cast("double").as("LATITUDE"),
+          col("LONGITUDE").cast("double").as("LONGITUDE"),
+          col("FOD_ID")
+        )
+
+    cleansedDf
+      .withColumn("rank",
+        row_number()
+        .over(
+          Window.partitionBy(
+            "DiscoveryDate",
+            "ContDate",
+            "LATITUDE",
+            "LONGITUDE"
+          ).orderBy("DiscoveryDate")
         )
       )
-      .groupBy(
-        col("DiscoveryDate").cast("date").as("DiscoveryDate"),
-        col("ContDate").cast("date").as("ContDate"),
-        col("LATITUDE").cast("double").as("LATITUDE"),
-        col("LONGITUDE").cast("double").as("LONGITUDE")
-      )
-      .agg(
-        first(col("FOD_ID")).as("FOD_ID")
-      )
+      .filter(col("rank") === 1)
+      .drop(col("rank"))
   }
 
   override protected def load(transformedDf: DataFrame): Unit = {
