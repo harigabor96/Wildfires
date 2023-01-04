@@ -27,7 +27,7 @@ This design pattern is general-purpose which means that:
 - It is not affected by late arriving data/asynchrony.
 
 It achieves these criteria by adhering to the following concepts:
-- Independent Data Marts (**[1](https://github.com/harigabor96/Wildfires#1-independent-data-marts-depending-directly-on-raw-data)**)
+- Decentralized Data Cleansing (**[1](https://github.com/harigabor96/Wildfires#1-decentralized-data-cleansing)**)
 - Decoupling (**[2](https://github.com/harigabor96/Wildfires#2-multiple-decoupled-and-standardized-projects)**)
 - Incrementality & Idempotence (**[3](https://github.com/harigabor96/Wildfires#3-incrementality-idempotence--partitioning)**)
 - Functional Paradigm (**[4](https://github.com/harigabor96/Wildfires#4-functional-data-engineering-with-snapshots-and-archives)**)
@@ -41,7 +41,7 @@ The main influences behind it are:
 - The Data Mesh Architecture: [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
-### 1. Independent Data Marts depending directly on Raw Data
+### 1. Decentralized Data Cleansing
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should be cleansed and integrated to avoid containing contradictory information. This effectively means that in an Enterprise Data Warehouse consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". This approach also allows multiple versions of truth to be present, however, it treats them as outliers which becomes a problem, when a large number of parallel truths exist, which is not an uncommon thing nowadays as:
 - Selecting/Filtering before cleansing is a common way of performance optimization and lowering development costs.
 - Low-quality (semi-structured, unstructured) data is often impossible to cleanse in a standardized way.
