@@ -27,7 +27,7 @@ This design pattern is general-purpose which means that:
 - It is not affected by late arriving data/asynchrony.
 
 It achieves these criteria by adhering to the following concepts:
-- Open-closed principle (**[1](https://github.com/harigabor96/Wildfires#1-data-marts-depending-directly-on-the-modification-resistant-raw-data)**)
+- Independent Data Marts (**[1](https://github.com/harigabor96/Wildfires#1-independent-data-marts-depending-directly-on-raw-data)**)
 - Decoupling (**[2](https://github.com/harigabor96/Wildfires#2-multiple-decoupled-and-standardized-projects)**)
 - Incrementality & Idempotence (**[3](https://github.com/harigabor96/Wildfires#3-incrementality-idempotence--partitioning)**)
 - Functional Paradigm (**[4](https://github.com/harigabor96/Wildfires#4-functional-data-engineering-with-snapshots-and-archives)**)
@@ -41,7 +41,7 @@ The main influences behind it are:
 - The Data Mesh Architecture: [https://www.datamesh-architecture.com/](https://www.datamesh-architecture.com/)
 
 ![alt text](https://github.com/harigabor96/Wildfires/blob/main/resources/Architecture.jpg?raw=true)
-### 1. Data Marts depending directly on the modification-resistant Raw Data
+### 1. Independent Data Marts depending directly on Raw Data
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should be cleansed and integrated to avoid containing contradictory information. This effectively means that incorrect but consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". 
 
 However, in a modern architecture, there is no better single source of truth than raw data. One reason for this is that data cleansing is a subjective process (even more so with low-quality input data) which often results in unintentionally losing information, thus losing potential analytical value (for example duplicate analysis). Another reason is that cleansing all the data in a standardized way wastes human, compute (really problematic with low latency requirements), and storage resources during the very common use case when only a small filtered and/or selected subset of the data is required for the analysis. However, the main reason for a "raw single source of truth" is that the Enterprise Data Warehouse does not take the closed half of the open-closed principle into consideration (which is not surprising because the EDW is older than SOLID). By this, I mean that ETL pipelines that are responsible for data cleansing are more likely to be modified and redeployed, because of bugs, faulty initial design, and not being generic, which results in frequently breaking the many, tightly coupled data marts depending on them. In comparison, a central "raw warehouse" would only break its' many data marts when the schema changes in the source, which is a justified reason to do so as the analytical solutions are fundamentally dependent on the data that they analyze. In short, the place where the large-scale, intertwined cross-functional data consumption can happen (a.k.a. EDW-Data Mart transition or the "Mesh" in Data Mesh) should be between the raw and cleansed layers, because the raw layer is more stable as a dependency (more closed to modification) than the layers further downstream. Additional notes on this can be found in the file "Critique of Data Mesh & EDW" in the resources folder.
