@@ -49,7 +49,7 @@ The independent data mart approach was labeled as an anti-pattern both by Inmon 
 The main reason why the EDW's approach is problematic is that it takes the ownership of cleansing from the (consumer-aligned) data marts and gives it to the monolithic (source-aligned) EDW that is often developed by a central team in a separate repo. As a consequence, both customizing and modifying these individual versions of truth becomes cumbersome and unstable as:
 - The central team will be unaware which data marts depend on a certain version of the truth.
 - The central team will be unaware whether a modification breaks dependent data marts.
-- The central team will have to constantly satisfy consumer-specific requests.
+- The central team will have to constantly satisfy contradictory consumer-specific requests.
 
 As the number of data mart dependencies grows, the above problems will lead to frequent and unintentional breaking of data marts, a lot of data mart downtime, and the need for constant ad-hoc data mart bug fixes.
 
