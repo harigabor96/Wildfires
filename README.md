@@ -45,6 +45,7 @@ The main influences behind it are:
 The independent data mart approach was labeled as an anti-pattern both by Inmon and Kimball despite its' popularity. The reasoning behind this was that a Data Warehouse should be cleansed and integrated to avoid containing contradictory information. This effectively means that in an Enterprise Data Warehouse consistent ETL is preferred over divergent ETL that runs on the same source data, which leads to the concept of the Enterprise Data Warehouse, the "single source of truth". This approach also allows multiple versions of truth to be present, however, it treats them as outliers which becomes a problem, when a large number of parallel truths exist, which is not an uncommon thing nowadays as:
 - Selecting/Filtering before cleansing is a common way of performance optimization and lowering development costs.
 - Low-quality (semi-structured, unstructured) data is often impossible to cleanse in a standardized way.
+
 The main reason why the EDW's approach is problematic is that it takes the ownership of cleansing from the (consumer-aligned) data marts and gives it to the monolithic (source-aligned) EDW that is often developed by a central team in a separate repo. As a consequence, both customizing and modifying these individual versions of truth becomes cumbersome and unstable as:
 - The central team will be unaware which data marts depend on a certain version of the truth.
 - The central team will be unaware whether a modification breaks dependent data marts.
